@@ -1,18 +1,12 @@
-#Projekt Języki Symboliczne:
+# Projekt Języki Symboliczne:
 
+# Deadline 27 maja
 
-#Deadline 27 maja
+## Saper - Miłosz Momot
 
+## [Publiczne repozytorium](https://help.github.com/en/github/managing-your-work-on-github/creating-a-permanent-link-to-a-code-snippet)
 
-##Saper - Miłosz Momot
-
-
-
-##[Publiczne repozytorium](https://help.github.com/en/github/managing-your-work-on-github/creating-a-permanent-link-to-a-code-snippet)
-
-
-
-###Opis zadania
+### Opis zadania
 + Główne okno zawiera dwa pola tekstowe do wprowadzania rozmiaru planszy (n na m
 pól), planszę o wymiarach n na m pól (np. siatka przycisków), pole tekstowe na
 wprowadzenie liczby min na planszy, liczbę oznaczonych pól, liczbę min na planszy,
@@ -52,7 +46,9 @@ tekstowym (każde możliwe rozłożenie min jest równie prawdopodobne).
     + obsługa kodu xyzzy
     + mozliwosc modyfikacji rozmiaru planszy danymi z klawiatury
     + ... pomysły, które przyjdą mi do głowy w trakcie pisania programu
-###Testy
+    
+### Testy
+
 1. Próba rozpoczęcia gry z rozmiarem planszy i liczbą min: (1 na 1; 1), (5 na 1; 2), (4 na
 1; 2), (20 na 500; 12), (5 na 6; -4), (3 na 3; 10), (1 na 10; 5) - oczekiwane komunikaty
 o błędzie. Wprowadzenie rozmiarów planszy 8 na 8 i liczby min równej 12 na
