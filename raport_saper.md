@@ -11,3 +11,9 @@ konstrukcje takie jak:
 + Klasy
 + Wyjątki
 + Moduły
+
+#Raport z projektu
+##Saper - Miłosz Momot
+####Założenia projektu:
++ Utworzenie podstawy Sapera - stworzenie tablicy dwu wymiarowej zawierającej
+informacje o lokalizacji bomb na planszy
