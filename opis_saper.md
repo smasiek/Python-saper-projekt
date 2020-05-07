@@ -33,16 +33,27 @@ tekstowym (każde możliwe rozłożenie min jest równie prawdopodobne).
 
 + Do tworzenia okien i obsługi eventów zostanie użyta biblioteka pygame
 
-+ Początkowo stworzona zostanie część back endowa odpowiadająca za reprezentacje min i planszy
++ Początkowo stworzona zostanie część back-endowa odpowiadająca za reprezentacje min i planszy
 
-+ Następnie powstanie podstawowa reprezentacja graficzna Sapera
++ Następnie powstanie podstawowa reprezentacja graficzna Sapera,
+ użyte zostaną do niej ikony, które postaram się stworzyć w photoshopie:
+
+  Odpowiednio reprezentować będą:
+    + Minę
+    + Flagę
+    + Pytajnik
+    + Pole domyślne
+    + Przyciemnione pole domyślne pokazujace się po użyciu kodu
 
 + Po stworzeniu interface'u graficznego dodane zostaną funkcje odpowiadające za poprawne działanie Sapera:
-    + funkcje wywoływane kliknięciami, 
-    + weryfikacja czy kliknieta została mina bądź wyświetlenie odpowiedniej cyfry, 
+    + funkcje wywoływane kliknięciami
+        + odkrycie pola po wcześniejszym sprawdzeniu czy jest aktywne/flagowane
+        + oflagowanie
+        + podwójne oflagowanie
+    + weryfikacja czy kliknieta została mina bądź wyświetlenie odpowiedniej cyfry 
     + uzupełnianie automatyczne pól bez min w pobliżu
-    + sprawdzenie wygranej, 
-    + funkcja koncząca gre
+    + sprawdzenie wygranej 
+    + funkcja koncząca gre - ujawnienie wszystkich pól i odpowiedni komiunikat zależnie od wygranej/przegranej
     + obsługa kodu xyzzy
     + mozliwosc modyfikacji rozmiaru planszy danymi z klawiatury
     + ... pomysły, które przyjdą mi do głowy w trakcie pisania programu
