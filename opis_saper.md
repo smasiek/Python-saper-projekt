@@ -1,9 +1,16 @@
 #Projekt Języki Symboliczne:
 
+
 #Deadline 27 maja
+
+
 ##Saper - Miłosz Momot
 
+
+
 ##[Publiczne repozytorium](https://help.github.com/en/github/managing-your-work-on-github/creating-a-permanent-link-to-a-code-snippet)
+
+
 
 ###Opis zadania
 + Główne okno zawiera dwa pola tekstowe do wprowadzania rozmiaru planszy (n na m
