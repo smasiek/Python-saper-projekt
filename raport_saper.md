@@ -17,3 +17,4 @@ konstrukcje takie jak:
 ####Założenia projektu:
 + Utworzenie podstawy Sapera - stworzenie tablicy dwu wymiarowej zawierającej
 informacje o lokalizacji bomb na planszy
++ Zaprojektowanie systemu badającego ilość bomb w pobliżu każdego z pól
