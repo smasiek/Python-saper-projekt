@@ -1,19 +1,19 @@
 '''Importowane biblioteki'''
 import random
-
+import pygame
+from pygame.locals import *
+pygame.init()
 
 class Field:
     '''
     Stworzenie Pola jako klasy posiadającej odpowiednie pola
     '''
 
-    def __init__(self,isBomb,x,y,clicked,minesAround,isActive):
+    def __init__(self,isBomb,x,y,minesAround):
         self._isBomb=isBomb
         self._x=x
         self._y=y
-        self._clicked=clicked
         self._minesAround=minesAround
-        self._isActive=isActive
     def setIsBomb(self):
         self._isBomb=True
     def setMinesAround(self,minesAround):
@@ -24,72 +24,139 @@ class Field:
         return self._isBomb
     def getMinesAround(self):
         return self._minesAround
-    def getClicked(self):
-        return self._clicked
-    def getActive(self):
-        return self._isActive
-
 
 '''
-Stworzenie tablicy reprezentujacej wystepowanie bomb
+Stworzenie tablicy reprezentujacej plansze
 '''
 
-def isBombArray(n,bombs):
+def getMatrix(n,m,bombs):
     '''
-    :param n: wymiar planszy
+    :param n: 1st wymiar planszy
+    :param m: 2nd wymiar planszy
     :param bombs: ilosc bomb
     :return: plansza true/false
     '''
-    array=[[Field(False,i,j,'0',0,True) for j in range(n)]for i in range(n)]
-    possibilities=[[[i,j]for j in range(n)]for i in range(n)]
+    array=[[Field(False,i,j,0) for j in range(m)]for i in range(n)]
+    possibilities=[[[i,j]for j in range(m)]for i in range(n)]
 
     for i in range(bombs):
         '''Uzupelnianie minami'''
 
         chosen = random.choice(random.choice(possibilities))
         array[chosen[0]][chosen[1]].setIsBomb()
-        countBombs = 0
-        for x in range(1):
-            if chosen[0] - 1 > 0 and chosen[1] - 1 > 0:
-                if not array[chosen[0] - 1][chosen[1] - 1].getIsBomb():
-                    array[chosen[0] - 1][chosen[1] - 1].incMinesAround()
-            if chosen[0]-1>0:
-                if not array[chosen[0]-1][chosen[1]].getIsBomb():
-                    array[chosen[0]-1][chosen[1]].incMinesAround()
-            if chosen[0] - 1 > 0 and chosen[1] + 1 < n:
-                if not array[chosen[0] - 1][chosen[1] + 1].getIsBomb():
-                    array[chosen[0] - 1][chosen[1] + 1].incMinesAround()
-            if chosen[1] - 1 > 0:
-                if not array[chosen[0]][chosen[1] - 1].getIsBomb():
-                    array[chosen[0]][chosen[1] - 1].incMinesAround()
-            if chosen[1] + 1 < n:
-                if not array[chosen[0]][chosen[1] + 1].getIsBomb():
-                    array[chosen[0]][chosen[1] + 1].incMinesAround()
-            if chosen[0] + 1 < n and chosen[1] - 1 > 0:
-                if not array[chosen[0] + 1][chosen[1] - 1].getIsBomb():
-                    array[chosen[0] + 1][chosen[1] - 1].incMinesAround()
-            if chosen[0] + 1 < n:
-                if not array[chosen[0] - 1][chosen[1]].getIsBomb():
-                    array[chosen[0] - 1][chosen[1]].incMinesAround()
-            if chosen[0] + 1 < n and chosen[1] + 1 < n:
-                if not array[chosen[0] - 1][chosen[1] - 1].getIsBomb():
-                    array[chosen[0] - 1][chosen[1] - 1].incMinesAround()
-        #array[chosen[0]][chosen[1]].setMinesAround(5)
+        '''Skorygowanie pola minyNaOkoło'''
+
+        if chosen[0] - 1 >= 0 and chosen[1] - 1 >= 0:
+            array[chosen[0] - 1][chosen[1] - 1].incMinesAround()
+
+        if chosen[1]-1 >= 0:
+            array[chosen[0]][chosen[1]-1].incMinesAround()
+
+        if chosen[0] + 1 < n and chosen[1] - 1 >= 0:
+            array[chosen[0] + 1][chosen[1] - 1].incMinesAround()
+
+        if chosen[0] - 1 >= 0:
+            array[chosen[0]-1][chosen[1]].incMinesAround()
+
+        if chosen[0] + 1 < n:
+            array[chosen[0]+1][chosen[1]].incMinesAround()
+
+        if chosen[0] - 1 >= 0 and chosen[1] + 1 < m:
+            array[chosen[0] - 1][chosen[1] + 1].incMinesAround()
+
+        if chosen[1] + 1 < m:
+            array[chosen[0]][chosen[1]+1].incMinesAround()
+
+        if chosen[0] + 1 < n and chosen[1] + 1 < m:
+            array[chosen[0] + 1][chosen[1] + 1].incMinesAround()
 
     return array
-def printArrayState(array,n):
+def printArrayState(array,n,m):
     for i in range(n):
-        for j in range(n):
+        for j in range(m):
             print(array[i][j].getIsBomb(),end=" ")
         print()
 
-def printMinesAround(array,n):
+def printMinesAround(array,n,m):
     for i in range(n):
-        for j in range(n):
+        for j in range(m):
             print(array[i][j].getMinesAround(),end=" ")
         print()
 
+'''Tymczasowe zainicjowanie zmiennych które w przyszłosci będą wprowadzone w textboxie'''
+n=10
+m=10
+bombs=10
 
-array=isBombArray(5,5)
-printArrayState(array,5)
-printMinesAround(array,5)
+'''Ustalenie wymiarów okna'''
+if n <8 and m<8:
+    fieldHeight = 100
+    fieldWidth = 100
+else:
+    fieldHeight=60
+    fieldWidth=60
+topBarHeight=75
+
+height=n*fieldHeight+topBarHeight
+width=m*fieldWidth
+
+resolution = (width, height)
+window = pygame.display.set_mode(resolution, DOUBLEBUF)
+window.fill((255, 255, 255))
+
+
+
+zero=pygame.image.load("icons\\blank.png")
+one=pygame.image.load("icons\\1.png")
+two=pygame.image.load("icons\\2.png")
+three=pygame.image.load("icons\\3.png")
+four=pygame.image.load("icons\\4.png")
+five=pygame.image.load("icons\\5.png")
+six=pygame.image.load("icons\\6.png")
+seven=pygame.image.load("icons\\7.png")
+eight=pygame.image.load("icons\\8.png")
+bomb=pygame.image.load("icons\\bomb.png")
+flag=pygame.image.load("icons\\flag.png")
+qmark=pygame.image.load("icons\\qmark.png")
+default=pygame.image.load("icons\\def.png")
+
+numbers=[zero,one,two,three,four,five,six,seven,eight]
+
+class Square():
+    def __init__(self,x,y,height,width,clicked,isVisible,image):
+        '''
+        x,y - koordynaty pola
+        height,width - wymiary pola
+        clicked - 0-nie,1-LPM,2-PPMx1,3-PPMx2
+        isVisible - czy odkryte?
+        '''
+        self._x = x
+        self._y = y
+        self._height = height
+        self._width = width
+        self._clicked = clicked
+        self._isVisible = isVisible
+        self._image = image
+    def getPxX(self):
+        return self._x*self._height
+    def getPxY(self):
+        return self._y*self._width
+    def draw(self,window):
+        window.blit(numbers[0], (self.getPxX, self.getPxY))
+
+run=True
+while run:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+        elif True :
+            pass
+
+
+    pygame.display.update()
+
+
+array=getMatrix(n,m,bombs)
+printArrayState(array,n,m)
+printMinesAround(array,n,m)

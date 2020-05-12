@@ -18,3 +18,7 @@ konstrukcje takie jak:
 + Utworzenie podstawy Sapera - stworzenie tablicy dwu wymiarowej zawierającej
 informacje o lokalizacji bomb na planszy
 + Zaprojektowanie systemu badającego ilość bomb w pobliżu każdego z pól
++ Zaimplementowanie pygame
++ Stworzenie okna
++ Zaprojektowanie grafik w Photoshopie
++ Załadowanie grafik do programu
