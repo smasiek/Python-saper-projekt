@@ -22,3 +22,4 @@ informacje o lokalizacji bomb na planszy
 + Stworzenie okna
 + Zaprojektowanie grafik w Photoshopie
 + Załadowanie grafik do programu
++ Wyświetlanie kwadratów w odpowiednich wymiarach

@@ -90,20 +90,20 @@ bombs=10
 
 '''Ustalenie wymiarów okna'''
 if n <8 and m<8:
-    fieldHeight = 100
-    fieldWidth = 100
+    squareHeight = 100
+    squareWidth = 100
 else:
-    fieldHeight=60
-    fieldWidth=60
+    squareHeight=60
+    squareWidth=60
 topBarHeight=75
 
-height=n*fieldHeight+topBarHeight
-width=m*fieldWidth
+height= n * squareHeight + topBarHeight
+width= m * squareWidth
 
 resolution = (width, height)
 window = pygame.display.set_mode(resolution, DOUBLEBUF)
 window.fill((255, 255, 255))
-
+screen = pygame.display.get_surface()
 
 
 zero=pygame.image.load("icons\\blank.png")
@@ -138,11 +138,25 @@ class Square():
         self._isVisible = isVisible
         self._image = image
     def getPxX(self):
-        return self._x*self._height
+        return int(self._x*self._height)
     def getPxY(self):
-        return self._y*self._width
+        return int(self._y*self._width+topBarHeight)
     def draw(self,window):
-        window.blit(numbers[0], (self.getPxX, self.getPxY))
+        screen.blit(default, (self.getPxX(),self.getPxY()))
+    def setImage(self,image):
+        self._image=image
+
+
+array=getMatrix(n,m,bombs)
+
+squares=[[Square(i,j,squareHeight,squareWidth,0,False,default)for j in range(m)]for i in range(n)]
+
+def drawScene():
+
+    for i in range(n):
+        for j in range(m):
+            squares[i][j].draw(window)
+
 
 run=True
 while run:
@@ -151,12 +165,12 @@ while run:
             run = False
             pygame.quit()
         elif True :
-            pass
+            drawScene()
 
 
     pygame.display.update()
 
 
-array=getMatrix(n,m,bombs)
+
 printArrayState(array,n,m)
 printMinesAround(array,n,m)
