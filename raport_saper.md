@@ -23,3 +23,5 @@ informacje o lokalizacji bomb na planszy
 + Zaprojektowanie grafik w Photoshopie
 + Załadowanie grafik do programu
 + Wyświetlanie kwadratów w odpowiednich wymiarach
++ Dodanie funkcji wywoływanej kliknięciem
++ Interaktywne pola
