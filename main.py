@@ -20,7 +20,7 @@ class Field:
         self._minesAround=minesAround
     def incMinesAround(self):
         self._minesAround+=1
-    def getIsBomb(self):
+    def isBomb(self):
         return self._isBomb
     def getMinesAround(self):
         return self._minesAround
@@ -34,8 +34,8 @@ class Square():
         isVisible - czy odkryte?
         '''
         self._rect=pygame.rect.Rect(x,y+75,height,width)
-        self._x = x
-        self._y = y+75
+        self._x = x+75
+        self._y = y
         self._height = height
         self._width = width
         self._clicked = clicked
@@ -49,38 +49,88 @@ class Square():
         return int(self._y) #75 = topBarHeight
 
     def draw(self,window):
-        window.blit(self._image, (self.getPxX(),self.getPxY()))
+        window.blit(self._image, (self.getPxY(),self.getPxX()))
 
     def setImage(self,image):
         self._image=image
 
     def setClicked(self,click):
-        self._clicked=click;
+        self._clicked=click
 
     def getClicked(self):
         return self._clicked
 
-def flood(squares,fields,numbers,screen,i,j,n,m,isFlood):
+'''Tu zrobic funkcje ktora w okienku bedzie obslugiwala wpisywanie n i m a potem tworzenie okna, poki co z ręki:'''
+n=4
+m=4
+bombs=15
+
+if n < 8 and m < 8:
+    squareHeight = 100
+    squareWidth = 100
+else:
+    squareHeight = 60
+    squareWidth = 60
+topBarHeight = 75
+
+height = n * squareHeight + topBarHeight
+width = m * squareWidth
+resolution = (width, height)
+window = pygame.display.set_mode(resolution, DOUBLEBUF)
+window.fill((255, 255, 255))
+screen = pygame.display.get_surface()
+'''Koniec funkcji'''
+
+
+zero=pygame.image.load("icons\\blank.png")
+one=pygame.image.load("icons\\1.png")
+two=pygame.image.load("icons\\2.png")
+three=pygame.image.load("icons\\3.png")
+four=pygame.image.load("icons\\4.png")
+five=pygame.image.load("icons\\5.png")
+six=pygame.image.load("icons\\6.png")
+seven=pygame.image.load("icons\\7.png")
+eight=pygame.image.load("icons\\8.png")
+bomb=pygame.image.load("icons\\bomb.png")
+flag=pygame.image.load("icons\\flag.png")
+qmark=pygame.image.load("icons\\qmark.png")
+default=pygame.image.load("icons\\def.png")
+
+numbers=[zero,one,two,three,four,five,six,seven,eight]
+
+
+
+def reveal(squares,fields,i,j):
+    if squares[i][j].getClicked() == 0:
+        if fields[i][j].isBomb():
+            squares[i][j].setImage(bomb)
+            squares[i][j].draw(screen)
+            squares[i][j].setClicked(1)
+            """DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY"""
+            pygame.display.update()
+        else:
+            squares[i][j].setImage(numbers[fields[i][j].getMinesAround()])
+            squares[i][j].draw(screen)
+            squares[i][j].setClicked(1)
+            """
+             DODAC TUTAJ WARUNEK SPRAWDZAJACY WYGRANA
+                TAK: DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY
+                NIE: PASS
+            """
+            if fields[i][j].getMinesAround() == 0:
+                flood(squares, fields, numbers, screen, i, j, n, m)
+            pygame.display.update()
+
+def flood(squares,fields,numbers,screen,i,j,n,m):
 
     tab=[-1,0,1]
     for l in tab:
         for k in tab:
-            print(i+k," cos tam ",j+l)
-            if (k!=0 or l!=0) and ( (i+k>=0 and j+l<m) and (i+k<n and j+l<m) and(i+k>=0 and j+l>=0) and (i+k>=0 and j+l<m)):
-                if squares[i+k][j+l].getClicked() == 0:
-                    if not fields[i + k][j + l].getIsBomb():
-                        squares[i + k][j + l].setImage(numbers[fields[i + k][j + l].getMinesAround()])
-                        squares[i + k][j + l].draw(screen)
-                        squares[i + k][j + l].setClicked(1)
-                        if isFlood==True:
-                            if fields[i + k][j + l].getMinesAround() == 0:
-
-                                flood(squares, fields, numbers, screen, i + k, j + l, n, m,True)
-                            else:
-                                flood(squares, fields, numbers, screen, i + k, j + l, n, m, False)
-                        #elif:
-                            #pass
-
+            ii=i+l
+            jj=j+k
+            if ii>-1 and ii<n and jj>-1 and jj<m:
+                if not fields[ii][jj].isBomb():
+                   reveal(squares,fields,ii,jj)
 
 
 
@@ -104,32 +154,33 @@ def getMatrix(n,m,bombs):
     for i in range(bombs):
         '''Uzupelnianie minami'''
 
+
         chosen = random.choice(random.choice(possibilities))
         array[chosen[0]][chosen[1]].setIsBomb()
         '''Skorygowanie pola minyNaOkoło'''
 
-        if chosen[0] - 1 >= 0 and chosen[1] - 1 >= 0:
+        if (chosen[0] - 1) >= 0 and (chosen[1] - 1) >= 0 and not array[chosen[0] - 1][chosen[1] - 1].isBomb() :
             array[chosen[0] - 1][chosen[1] - 1].incMinesAround()
 
-        if chosen[1]-1 >= 0:
+        if (chosen[1]-1) >= 0 and not array[chosen[0]][chosen[1]-1].isBomb() :
             array[chosen[0]][chosen[1]-1].incMinesAround()
 
-        if chosen[0] + 1 < n and chosen[1] - 1 >= 0:
+        if chosen[0] + 1 < n and chosen[1] - 1 >= 0 and not array[chosen[0] + 1][chosen[1] - 1].isBomb() :
             array[chosen[0] + 1][chosen[1] - 1].incMinesAround()
 
-        if chosen[0] - 1 >= 0:
+        if chosen[0] - 1 >= 0 and not array[chosen[0]-1][chosen[1]].isBomb() :
             array[chosen[0]-1][chosen[1]].incMinesAround()
 
-        if chosen[0] + 1 < n:
+        if chosen[0] + 1 < n and not array[chosen[0]+1][chosen[1]].isBomb() :
             array[chosen[0]+1][chosen[1]].incMinesAround()
 
-        if chosen[0] - 1 >= 0 and chosen[1] + 1 < m:
+        if chosen[0] - 1 >= 0 and chosen[1] + 1 < m and not array[chosen[0] - 1][chosen[1] + 1].isBomb() :
             array[chosen[0] - 1][chosen[1] + 1].incMinesAround()
 
-        if chosen[1] + 1 < m:
+        if chosen[1] + 1 < m and not array[chosen[0]][chosen[1]+1].isBomb() :
             array[chosen[0]][chosen[1]+1].incMinesAround()
 
-        if chosen[0] + 1 < n and chosen[1] + 1 < m:
+        if chosen[0] + 1 < n and chosen[1] + 1 < m and not array[chosen[0] + 1][chosen[1] + 1].isBomb() :
             array[chosen[0] + 1][chosen[1] + 1].incMinesAround()
 
     return array
@@ -143,49 +194,25 @@ def drawScene(squares,window):
 def printArrayState(array,n,m):
     for i in range(n):
         for j in range(m):
-            print(array[i][j].getIsBomb(),end=" ")
+            print(array[i][j].isBomb(), end=" ")
         print()
 
+def printMinesAround(array,n,m):
+    for i in range(n):
+        for j in range(n):
+            print(array[i][j].getMinesAround(),end=" ")
+        print()
 
 
 def reset():
     minesweeper(n,m,bombs)
 '''Tymczasowe zainicjowanie zmiennych które w przyszłosci będą wprowadzone w textboxie'''
-n=15
-m=15
-bombs=40
+
 def minesweeper(n,m,bombs):
     '''Ustalenie wymiarów okna'''
-    if n <8 and m<8:
-        squareHeight = 100
-        squareWidth = 100
-    else:
-        squareHeight=60
-        squareWidth=60
-    topBarHeight=75
 
-    height= n * squareHeight + topBarHeight
-    width= m * squareWidth
-    resolution = (width, height)
-    window = pygame.display.set_mode(resolution, DOUBLEBUF)
-    window.fill((255, 255, 255))
-    screen = pygame.display.get_surface()
 
-    zero=pygame.image.load("icons\\blank.png")
-    one=pygame.image.load("icons\\1.png")
-    two=pygame.image.load("icons\\2.png")
-    three=pygame.image.load("icons\\3.png")
-    four=pygame.image.load("icons\\4.png")
-    five=pygame.image.load("icons\\5.png")
-    six=pygame.image.load("icons\\6.png")
-    seven=pygame.image.load("icons\\7.png")
-    eight=pygame.image.load("icons\\8.png")
-    bomb=pygame.image.load("icons\\bomb.png")
-    flag=pygame.image.load("icons\\flag.png")
-    qmark=pygame.image.load("icons\\qmark.png")
-    default=pygame.image.load("icons\\def.png")
 
-    numbers=[zero,one,two,three,four,five,six,seven,eight]
 
     fields=getMatrix(n,m,bombs)
 
@@ -196,6 +223,7 @@ def minesweeper(n,m,bombs):
     run=True
     """@DOWN do usuniecia - kontrola czy dobrze wyswietlaja sie cyferki"""
     printArrayState(fields, n, m)
+    printMinesAround(fields, n, m)
     while run:
 
         for event in pygame.event.get():
@@ -212,30 +240,12 @@ def minesweeper(n,m,bombs):
                 for i in range(len(squares)):
                     for j in range(len(squares[i])):
                         r=pygame.rect.Rect(pygame.mouse.get_pos(),(1,1))
-                        if squares[i][j]._rect.colliderect(r):
-                            if squares[i][j].getClicked()==0:
-                                if fields[i][j].getIsBomb():
-                                    squares[i][j].setImage(bomb)
-                                    squares[i][j].draw(screen)
-                                    squares[i][j].setClicked(1)
-                                    """DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY"""
-                                    pygame.display.update()
-                                else:
-                                    squares[i][j].setImage(numbers[fields[i][j].getMinesAround()])
-                                    squares[i][j].draw(screen)
-                                    squares[i][j].setClicked(1)
-                                    """
-                                     DODAC TUTAJ WARUNEK SPRAWDZAJACY WYGRANA
-                                        TAK: DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY
-                                        NIE: PASS
-                                    """
-                                    if fields[i][j].getMinesAround() == 0:
-                                        flood(squares, fields, numbers, screen, i, j,n,m,True)
-                                    pygame.display.update()
-                            elif squares[i][j].getClicked()==2:
+                        if squares[j][i]._rect.colliderect(r):
+                            reveal(squares,fields,i,j)
+                        elif squares[j][i].getClicked()==2:
                                 """Celowe ominiecie reakcji ponieważ oflagowane pole nie moze byc klikniete"""
                                 pass
-                            elif squares[i][j].getClicked()==3:
+                        elif squares[j][i].getClicked()==3:
                                 """Celowe ominiecie reakcji ponieważ pole z pytajnikiem nie moze byc klikniete"""
                                 pass
 
@@ -244,21 +254,21 @@ def minesweeper(n,m,bombs):
                     for j in range(len(squares[i])):
                         r = pygame.rect.Rect(pygame.mouse.get_pos(), (1, 1))
                         if squares[i][j]._rect.colliderect(r):
-                            if squares[i][j].getClicked() == 0:
-                                squares[i][j].setImage(flag)
-                                squares[i][j].draw(screen)
-                                squares[i][j].setClicked(2)
+                            if squares[j][i].getClicked() == 0:
+                                squares[j][i].setImage(flag)
+                                squares[j][i].draw(screen)
+                                squares[j][i].setClicked(2)
                                 pygame.display.update()
 
-                            elif squares[i][j].getClicked() == 2:
-                                squares[i][j].setImage(qmark)
-                                squares[i][j].draw(screen)
-                                squares[i][j].setClicked(3)
+                            elif squares[j][i].getClicked() == 2:
+                                squares[j][i].setImage(qmark)
+                                squares[j][i].draw(screen)
+                                squares[j][i].setClicked(3)
                                 pygame.display.update()
-                            elif squares[i][j].getClicked() == 3:
-                                squares[i][j].setImage(default)
-                                squares[i][j].draw(screen)
-                                squares[i][j].setClicked(0)
+                            elif squares[j][i].getClicked() == 3:
+                                squares[j][i].setImage(default)
+                                squares[j][i].draw(screen)
+                                squares[j][i].setClicked(0)
                                 pygame.display.update()
                     else:
                            pass#print(squares[i][j]._rect)
