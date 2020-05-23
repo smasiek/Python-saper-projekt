@@ -25,4 +25,12 @@ informacje o lokalizacji bomb na planszy
 + Wyświetlanie kwadratów w odpowiednich wymiarach
 + Dodanie funkcji wywoływanej kliknięciem
 + Interaktywne pola
-+ 
++ Pola pokazują odpowiednie grafiki w zalezności od rodzaju kliknięcia
++ Pola które nie mają wokół siebie min włączają funkcje flood, która odpowiada
+za ujawnianie kolejnych pól aż do takiego które sąsiaduje z minami.
+    + Problem: jak odpowiednio sprawdzać czy następne sprawdzenie nie wyjdzie za mape
+        + Rozwiązanie: Odpowiednie rozrysowanie i przemyślenie architektury
+    + Problem: funkcja ujawniająca pola blokująca się już na ostatnim niegraniczącym z żadną miną polu ( nie pokazuje tych z numerkiem)
+         + Rozwiązanie: Tymczasowo rozwiązane przez isFlood
+    + Problem: funkcja mimo dojscia do granicy ujawnia też w dziwny sposób pola na ukos
+        + Rozwiązanie: ?
