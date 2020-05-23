@@ -41,14 +41,51 @@ class Square():
         self._clicked = clicked
         self._isVisible = isVisible
         self._image = image
+
     def getPxX(self):
         return int(self._x)
+
     def getPxY(self):
         return int(self._y) #75 = topBarHeight
+
     def draw(self,window):
         window.blit(self._image, (self.getPxX(),self.getPxY()))
+
     def setImage(self,image):
         self._image=image
+
+    def setClicked(self,click):
+        self._clicked=click;
+
+    def getClicked(self):
+        return self._clicked
+
+def flood(squares,fields,numbers,screen,i,j,n,m,isFlood):
+
+    tab=[-1,0,1]
+    for l in tab:
+        for k in tab:
+            print(i+k," cos tam ",j+l)
+            if (k!=0 or l!=0) and ( (i+k>=0 and j+l<m) and (i+k<n and j+l<m) and(i+k>=0 and j+l>=0) and (i+k>=0 and j+l<m)):
+                if squares[i+k][j+l].getClicked() == 0:
+                    if not fields[i + k][j + l].getIsBomb():
+                        squares[i + k][j + l].setImage(numbers[fields[i + k][j + l].getMinesAround()])
+                        squares[i + k][j + l].draw(screen)
+                        squares[i + k][j + l].setClicked(1)
+                        if isFlood==True:
+                            if fields[i + k][j + l].getMinesAround() == 0:
+
+                                flood(squares, fields, numbers, screen, i + k, j + l, n, m,True)
+                            else:
+                                flood(squares, fields, numbers, screen, i + k, j + l, n, m, False)
+                        #elif:
+                            #pass
+
+
+
+
+
+
 
 '''
 Stworzenie tablicy reprezentujacej plansze
@@ -103,13 +140,20 @@ def drawScene(squares,window):
         for j in range(len(squares[i])):
             squares[i][j].draw(window)
 
+def printArrayState(array,n,m):
+    for i in range(n):
+        for j in range(m):
+            print(array[i][j].getIsBomb(),end=" ")
+        print()
+
+
 
 def reset():
     minesweeper(n,m,bombs)
 '''Tymczasowe zainicjowanie zmiennych które w przyszłosci będą wprowadzone w textboxie'''
-n=10
-m=10
-bombs=10
+n=15
+m=15
+bombs=40
 def minesweeper(n,m,bombs):
     '''Ustalenie wymiarów okna'''
     if n <8 and m<8:
@@ -143,13 +187,15 @@ def minesweeper(n,m,bombs):
 
     numbers=[zero,one,two,three,four,five,six,seven,eight]
 
-    array=getMatrix(n,m,bombs)
+    fields=getMatrix(n,m,bombs)
 
     squares=[[Square(i*squareHeight,j*squareWidth,squareHeight,squareWidth,0,False,default)for j in range(m)]for i in range(n)]
 
     drawScene(squares, screen)
     pygame.display.update()
     run=True
+    """@DOWN do usuniecia - kontrola czy dobrze wyswietlaja sie cyferki"""
+    printArrayState(fields, n, m)
     while run:
 
         for event in pygame.event.get():
@@ -158,24 +204,66 @@ def minesweeper(n,m,bombs):
                 pygame.quit()
 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r: # TO W PRZYSZLOSCI ZAMIENIC NA KLIKNIECIE W PRZYCISK
+                if event.key == pygame.K_r: # TO W PRZYSZLOSCI ZAMIENIC NA KLIKNIECIE W PRZYCISK a nie w klawiature
                     run = False
                     reset()
 
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button==1:
-
                 for i in range(len(squares)):
                     for j in range(len(squares[i])):
                         r=pygame.rect.Rect(pygame.mouse.get_pos(),(1,1))
                         if squares[i][j]._rect.colliderect(r):
-                            squares[i][j].setImage(flag)
-                            squares[i][j]._image=flag
-                            squares[i][j].draw(screen)
-                            pygame.display.update()
+                            if squares[i][j].getClicked()==0:
+                                if fields[i][j].getIsBomb():
+                                    squares[i][j].setImage(bomb)
+                                    squares[i][j].draw(screen)
+                                    squares[i][j].setClicked(1)
+                                    """DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY"""
+                                    pygame.display.update()
+                                else:
+                                    squares[i][j].setImage(numbers[fields[i][j].getMinesAround()])
+                                    squares[i][j].draw(screen)
+                                    squares[i][j].setClicked(1)
+                                    """
+                                     DODAC TUTAJ WARUNEK SPRAWDZAJACY WYGRANA
+                                        TAK: DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY
+                                        NIE: PASS
+                                    """
+                                    if fields[i][j].getMinesAround() == 0:
+                                        flood(squares, fields, numbers, screen, i, j,n,m,True)
+                                    pygame.display.update()
+                            elif squares[i][j].getClicked()==2:
+                                """Celowe ominiecie reakcji ponieważ oflagowane pole nie moze byc klikniete"""
+                                pass
+                            elif squares[i][j].getClicked()==3:
+                                """Celowe ominiecie reakcji ponieważ pole z pytajnikiem nie moze byc klikniete"""
+                                pass
 
-                        else:
-                            print(squares[i][j]._rect)
-                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                for i in range(len(squares)):
+                    for j in range(len(squares[i])):
+                        r = pygame.rect.Rect(pygame.mouse.get_pos(), (1, 1))
+                        if squares[i][j]._rect.colliderect(r):
+                            if squares[i][j].getClicked() == 0:
+                                squares[i][j].setImage(flag)
+                                squares[i][j].draw(screen)
+                                squares[i][j].setClicked(2)
+                                pygame.display.update()
+
+                            elif squares[i][j].getClicked() == 2:
+                                squares[i][j].setImage(qmark)
+                                squares[i][j].draw(screen)
+                                squares[i][j].setClicked(3)
+                                pygame.display.update()
+                            elif squares[i][j].getClicked() == 3:
+                                squares[i][j].setImage(default)
+                                squares[i][j].draw(screen)
+                                squares[i][j].setClicked(0)
+                                pygame.display.update()
+                    else:
+                           pass#print(squares[i][j]._rect)
+                                            #print(squares[i][j].getClicked())
+                                #pygame.display.update()
 
 
 

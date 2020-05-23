@@ -25,3 +25,4 @@ informacje o lokalizacji bomb na planszy
 + Wyświetlanie kwadratów w odpowiednich wymiarach
 + Dodanie funkcji wywoływanej kliknięciem
 + Interaktywne pola
++ 
