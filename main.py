@@ -26,12 +26,12 @@ class Field:
         return self._minesAround
 
 class Square():
-    def __init__(self,x,y,height,width,clicked,isVisible,image):
+    visibleCount=0
+    def __init__(self,x,y,height,width,clicked,image):
         '''
         x,y - koordynaty pola
         height,width - wymiary pola
         clicked - 0-nie,1-LPM,2-PPMx1,3-PPMx2
-        isVisible - czy odkryte?
         '''
         self._rect=pygame.rect.Rect(x,y+75,height,width)
         self._x = x+75
@@ -39,7 +39,6 @@ class Square():
         self._height = height
         self._width = width
         self._clicked = clicked
-        self._isVisible = isVisible
         self._image = image
 
     def getPxX(self):
@@ -51,14 +50,22 @@ class Square():
     def draw(self,window):
         window.blit(self._image, (self.getPxY(),self.getPxX()))
 
+    #def incVisibleCount(self):
+    #    self.visibleCount+=1
+
     def setImage(self,image):
         self._image=image
 
     def setClicked(self,click):
         self._clicked=click
+        if click==1:
+            Square.visibleCount += 1
 
     def getClicked(self):
         return self._clicked
+
+    def getVisibleCount(self):
+        return self.visibleCount
 
 '''Tu zrobic funkcje ktora w okienku bedzie obslugiwala wpisywanie n i m a potem tworzenie okna, poki co z ręki:'''
 n=4
@@ -79,7 +86,12 @@ resolution = (width, height)
 window = pygame.display.set_mode(resolution, DOUBLEBUF)
 window.fill((255, 255, 255))
 screen = pygame.display.get_surface()
+
+
 '''Koniec funkcji'''
+
+
+
 
 
 zero=pygame.image.load("icons\\blank.png")
@@ -100,17 +112,40 @@ numbers=[zero,one,two,three,four,five,six,seven,eight]
 
 
 
+def endGame(squares,fields,i,j):
+    for i in range(n):
+        for j in range(m):
+            if squares[i][j].getClicked() == 0 or squares[i][j].getClicked() == 2 or squares[i][j].getClicked() == 3:
+                if fields[i][j].isBomb():
+                    squares[i][j].setImage(bomb)
+                    squares[i][j].draw(screen)
+                    squares[i][j].setClicked(1)
+                else:
+                    squares[i][j].setImage(numbers[fields[i][j].getMinesAround()])
+                    squares[i][j].draw(screen)
+                    squares[i][j].setClicked(1)
+    pygame.display.update()
+
+def checkIfWin(squares,fields,i,j):
+    if (m*n)-squares[i][j].getVisibleCount()<=bombs:
+        print('win')
+        return endGame(squares, fields, i, j)
+
+
+
 def reveal(squares,fields,i,j):
     if squares[i][j].getClicked() == 0:
         if fields[i][j].isBomb():
             squares[i][j].setImage(bomb)
             squares[i][j].draw(screen)
             squares[i][j].setClicked(1)
+            endGame(squares, fields, i, j)
             """DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY"""
             pygame.display.update()
         else:
             squares[i][j].setImage(numbers[fields[i][j].getMinesAround()])
             squares[i][j].draw(screen)
+            #squares[i][j].incVisibleCount()
             squares[i][j].setClicked(1)
             """
              DODAC TUTAJ WARUNEK SPRAWDZAJACY WYGRANA
@@ -119,6 +154,7 @@ def reveal(squares,fields,i,j):
             """
             if fields[i][j].getMinesAround() == 0:
                 flood(squares, fields, numbers, screen, i, j, n, m)
+            checkIfWin(squares, fields, i, j)
             pygame.display.update()
 
 def flood(squares,fields,numbers,screen,i,j,n,m):
@@ -131,6 +167,11 @@ def flood(squares,fields,numbers,screen,i,j,n,m):
             if ii>-1 and ii<n and jj>-1 and jj<m:
                 if not fields[ii][jj].isBomb():
                    reveal(squares,fields,ii,jj)
+
+
+'''Metody klasy plansza, narazie muszą być tu bo inaczej nie będą sie widzieć na wzajem i muszą widziec squares'''
+
+
 
 
 
@@ -149,12 +190,13 @@ def getMatrix(n,m,bombs):
     :return: plansza true/false
     '''
     array=[[Field(False,i,j,0) for j in range(m)]for i in range(n)]
-    possibilities = [[i, j] for j in range(m) for i in range(n)]
+    possibilities=[[i,j] for j in range(m) for i in range(n)]
 
     for i in range(bombs):
         '''Uzupelnianie minami'''
 
         chosen = random.choice(possibilities)
+        print(chosen)
         possibilities.remove(chosen)
 
         array[chosen[0]][chosen[1]].setIsBomb()
@@ -206,6 +248,7 @@ def printMinesAround(array,n,m):
 
 
 def reset():
+    window.fill((255, 255, 255))
     minesweeper(n,m,bombs)
 '''Tymczasowe zainicjowanie zmiennych które w przyszłosci będą wprowadzone w textboxie'''
 
@@ -216,8 +259,7 @@ def minesweeper(n,m,bombs):
 
 
     fields=getMatrix(n,m,bombs)
-
-    squares=[[Square(i*squareHeight,j*squareWidth,squareHeight,squareWidth,0,False,default)for j in range(m)]for i in range(n)]
+    squares=[[Square(i*squareHeight,j*squareWidth,squareHeight,squareWidth,0,default)for j in range(m)]for i in range(n)]
 
     drawScene(squares, screen)
     pygame.display.update()
