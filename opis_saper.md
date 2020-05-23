@@ -50,13 +50,13 @@ tekstowym (każde możliwe rozłożenie min jest równie prawdopodobne).
         + odkrycie pola po wcześniejszym sprawdzeniu czy jest aktywne/flagowane
         + oflagowanie
         + podwójne oflagowanie
-    + weryfikacja czy kliknieta została mina bądź wyświetlenie odpowiedniej cyfry 
-    + uzupełnianie automatyczne pól bez min w pobliżu
-    + sprawdzenie wygranej 
-    + funkcja koncząca gre - ujawnienie wszystkich pól i odpowiedni komiunikat zależnie od wygranej/przegranej
-    + obsługa kodu xyzzy
-    + mozliwosc modyfikacji rozmiaru planszy danymi z klawiatury
-    + ... pomysły, które przyjdą mi do głowy w trakcie pisania programu
+    - [ ] weryfikacja czy kliknieta została mina bądź wyświetlenie odpowiedniej cyfry 
+    - [ ] uzupełnianie automatyczne pól bez min w pobliżu
+    - [ ] sprawdzenie wygranej 
+    - [ ] funkcja koncząca gre - ujawnienie wszystkich pól i odpowiedni komiunikat zależnie od wygranej/przegranej
+    - [ ] obsługa kodu xyzzy
+    - [ ] mozliwosc modyfikacji rozmiaru planszy danymi z klawiatury
+    - [ ] ... pomysły, które przyjdą mi do głowy w trakcie pisania programu
     
 ### Testy
 

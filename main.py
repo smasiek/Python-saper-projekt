@@ -149,13 +149,14 @@ def getMatrix(n,m,bombs):
     :return: plansza true/false
     '''
     array=[[Field(False,i,j,0) for j in range(m)]for i in range(n)]
-    possibilities=[[[i,j]for j in range(m)]for i in range(n)]
+    possibilities = [[i, j] for j in range(m) for i in range(n)]
 
     for i in range(bombs):
         '''Uzupelnianie minami'''
 
+        chosen = random.choice(possibilities)
+        possibilities.remove(chosen)
 
-        chosen = random.choice(random.choice(possibilities))
         array[chosen[0]][chosen[1]].setIsBomb()
         '''Skorygowanie pola minyNaOkoło'''
 

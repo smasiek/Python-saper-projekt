@@ -37,3 +37,6 @@ za ujawnianie kolejnych pól aż do takiego które sąsiaduje z minami
 + Zmiana podejścia do funkcji flood i ujawnienia poprzez klikniecie LPM(teraz: reveal).
 Funkcja reveal jest w stanie wywołać funkcje flood, która aktualnie zajmuje się jedynie ponownym wywołaniem funkcji reveal
 na sąsiednich polach, które nie sa bombą
++Napotkałem problem z minami które powstawały w tym samym miejscu
+     + Rozwiązanie: Stworzenie listy przechowującej wszystkie możliwe koordynaty, wybór i usunięcie wybranych koordynatow z listy.
+     W kolejnej iteracji niemożliwe będzie stworzenie bomby na miejscu innej bomby.
