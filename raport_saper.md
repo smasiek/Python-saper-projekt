@@ -43,3 +43,4 @@ na sąsiednich polach, które nie sa bombą
 + Dodanie funkcji ujawniającej wszystkie pola
 + Obsługa przegranej
 + Obsługa wygranej
++ Dodanie obsługi kodu "xyzzy" do gry

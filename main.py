@@ -68,9 +68,9 @@ class Square():
         return self.visibleCount
 
 '''Tu zrobic funkcje ktora w okienku bedzie obslugiwala wpisywanie n i m a potem tworzenie okna, poki co z ręki:'''
-n=4
-m=4
-bombs=15
+n=9
+m=9
+bombs=50
 
 if n < 8 and m < 8:
     squareHeight = 100
@@ -91,9 +91,6 @@ screen = pygame.display.get_surface()
 '''Koniec funkcji'''
 
 
-
-
-
 zero=pygame.image.load("icons\\blank.png")
 one=pygame.image.load("icons\\1.png")
 two=pygame.image.load("icons\\2.png")
@@ -104,6 +101,7 @@ six=pygame.image.load("icons\\6.png")
 seven=pygame.image.load("icons\\7.png")
 eight=pygame.image.load("icons\\8.png")
 bomb=pygame.image.load("icons\\bomb.png")
+xyzz=pygame.image.load("icons\\xyzzy.png")
 flag=pygame.image.load("icons\\flag.png")
 qmark=pygame.image.load("icons\\qmark.png")
 default=pygame.image.load("icons\\def.png")
@@ -111,8 +109,8 @@ default=pygame.image.load("icons\\def.png")
 numbers=[zero,one,two,three,four,five,six,seven,eight]
 
 
-
-def endGame(squares,fields,i,j):
+'''Metody klasy plansza, narazie muszą być tu bo inaczej nie będą sie widzieć na wzajem i muszą widziec squares'''
+def endGame(squares,fields):
     for i in range(n):
         for j in range(m):
             if squares[i][j].getClicked() == 0 or squares[i][j].getClicked() == 2 or squares[i][j].getClicked() == 3:
@@ -127,10 +125,10 @@ def endGame(squares,fields,i,j):
     pygame.display.update()
 
 def checkIfWin(squares,fields,i,j):
-    if (m*n)-squares[i][j].getVisibleCount()<=bombs:
+    if (m*n)-squares[i][j].visibleCount<=bombs:
         print('win')
-        return endGame(squares, fields, i, j)
-
+        return endGame(squares, fields)
+'''koniec metod klasy plansza'''
 
 
 def reveal(squares,fields,i,j):
@@ -139,7 +137,7 @@ def reveal(squares,fields,i,j):
             squares[i][j].setImage(bomb)
             squares[i][j].draw(screen)
             squares[i][j].setClicked(1)
-            endGame(squares, fields, i, j)
+            endGame(squares, fields)
             """DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY"""
             pygame.display.update()
         else:
@@ -169,13 +167,13 @@ def flood(squares,fields,numbers,screen,i,j,n,m):
                    reveal(squares,fields,ii,jj)
 
 
-'''Metody klasy plansza, narazie muszą być tu bo inaczej nie będą sie widzieć na wzajem i muszą widziec squares'''
-
-
-
-
-
-
+def xyzzy(squares,fields):
+    for i in range(n):
+        for j in range(m):
+            if fields[i][j].isBomb():
+                squares[i][j].setImage(xyzz)
+                squares[i][j].draw(screen)
+    pygame.display.update()
 
 
 '''
@@ -267,6 +265,7 @@ def minesweeper(n,m,bombs):
     """@DOWN do usuniecia - kontrola czy dobrze wyswietlaja sie cyferki"""
     printArrayState(fields, n, m)
     printMinesAround(fields, n, m)
+    xyzzySequence = [False, False, False, False, False]
     while run:
 
         for event in pygame.event.get():
@@ -275,9 +274,43 @@ def minesweeper(n,m,bombs):
                 pygame.quit()
 
             elif event.type == pygame.KEYDOWN:
+                keys = pygame.key.get_pressed()
+
                 if event.key == pygame.K_r: # TO W PRZYSZLOSCI ZAMIENIC NA KLIKNIECIE W PRZYCISK a nie w klawiature
                     run = False
                     reset()
+
+                elif keys[K_x]:
+                    '''xyzzy event'''
+                    xyzzySequence[0]=True
+                    #print(xyzzySequence[0])
+                    #print("kod uruchomiony")
+
+#                    if event.type == pygame.KEYUP:
+ #                       if event.type == pygame.KEYDOWN:
+                elif keys[K_y] and xyzzySequence[0]== True :
+                    #print(xyzzySequence[0])
+                    xyzzySequence[0] = False
+                    xyzzySequence[1]=True
+                    #print("kod uruchomiony")
+                elif keys[K_z] and xyzzySequence[1]==True:
+                    xyzzySequence[1] = False
+                    xyzzySequence[2] = True
+                    #print("kod uruchomiony")
+                elif keys[K_z] and xyzzySequence[2]==True:
+                    xyzzySequence[2] = False
+                    xyzzySequence[3] = True
+                    #print("kod")
+                elif keys[K_y] and xyzzySequence[3]==True:
+                    xyzzySequence[3] = False
+                    xyzzySequence[4] = True
+                    xyzzy(squares,fields)
+                elif event.key != pygame.K_x or event.key != pygame.K_y or event.key != pygame.K_z:
+                    print("inny przycisk klikniety")
+                    print(xyzzySequence)
+                    for i in range(len(xyzzySequence)):
+                        xyzzySequence[i]=False
+                    print(xyzzySequence)
 
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button==1:
                 for i in range(len(squares)):
