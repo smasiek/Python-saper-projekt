@@ -44,3 +44,4 @@ na sąsiednich polach, które nie sa bombą
 + Obsługa przegranej
 + Obsługa wygranej
 + Dodanie obsługi kodu "xyzzy" do gry
++ Wygranie przez oflagowanie tylko i wyłącznie bomb

@@ -8,7 +8,7 @@ class Field:
     '''
     Stworzenie Pola jako klasy posiadającej odpowiednie pola
     '''
-
+    flaggedBombCount=0
     def __init__(self,isBomb,x,y,minesAround):
         self._isBomb=isBomb
         self._x=x
@@ -20,6 +20,14 @@ class Field:
         self._minesAround=minesAround
     def incMinesAround(self):
         self._minesAround+=1
+    def incBombFlagged(self):
+        if self._isBomb:
+            Field.flaggedBombCount +=1
+            print("Oznaczono bombe, count", Field.flaggedBombCount)
+    def decBombFlagged(self):
+        if self.isBomb():
+            Field.flaggedBombCount -=1
+            print("Odznaczono bombe, count", Field.flaggedBombCount)
     def isBomb(self):
         return self._isBomb
     def getMinesAround(self):
@@ -27,6 +35,7 @@ class Field:
 
 class Square():
     visibleCount=0
+    flaggedCount=0
     def __init__(self,x,y,height,width,clicked,image):
         '''
         x,y - koordynaty pola
@@ -60,6 +69,11 @@ class Square():
         self._clicked=click
         if click==1:
             Square.visibleCount += 1
+        if click==2:
+            Square.flaggedCount += 1
+        if click==0:
+            Square.flaggedCount -= 1
+        #print("Flagged count:" ,Square.flaggedCount)
 
     def getClicked(self):
         return self._clicked
@@ -68,9 +82,9 @@ class Square():
         return self.visibleCount
 
 '''Tu zrobic funkcje ktora w okienku bedzie obslugiwala wpisywanie n i m a potem tworzenie okna, poki co z ręki:'''
-n=9
-m=9
-bombs=50
+n=3
+m=3
+bombs=5
 
 if n < 8 and m < 8:
     squareHeight = 100
@@ -102,6 +116,7 @@ seven=pygame.image.load("icons\\7.png")
 eight=pygame.image.load("icons\\8.png")
 bomb=pygame.image.load("icons\\bomb.png")
 xyzz=pygame.image.load("icons\\xyzzy.png")
+flaggedxyzz=pygame.image.load("icons\\flaggedxyzzy.png")
 flag=pygame.image.load("icons\\flag.png")
 qmark=pygame.image.load("icons\\qmark.png")
 default=pygame.image.load("icons\\def.png")
@@ -126,7 +141,10 @@ def endGame(squares,fields):
 
 def checkIfWin(squares,fields,i,j):
     if (m*n)-squares[i][j].visibleCount<=bombs:
-        print('win')
+        print('win by click')
+        return endGame(squares, fields)
+    if Field.flaggedBombCount==bombs and Square.flaggedCount == bombs:
+        print('win by flagged')
         return endGame(squares, fields)
 '''koniec metod klasy plansza'''
 
@@ -171,8 +189,12 @@ def xyzzy(squares,fields):
     for i in range(n):
         for j in range(m):
             if fields[i][j].isBomb():
-                squares[i][j].setImage(xyzz)
-                squares[i][j].draw(screen)
+                if not squares[i][j].getClicked()==2:
+                    squares[i][j].setImage(xyzz)
+                    squares[i][j].draw(screen)
+                else:
+                    squares[i][j].setImage(flaggedxyzz)
+                    squares[i][j].draw(screen)
     pygame.display.update()
 
 
@@ -247,6 +269,9 @@ def printMinesAround(array,n,m):
 
 def reset():
     window.fill((255, 255, 255))
+    Field.flaggedBombCount = 0
+    Square.visibleCount = 0
+    Square.flaggedCount = 0
     minesweeper(n,m,bombs)
 '''Tymczasowe zainicjowanie zmiennych które w przyszłosci będą wprowadzone w textboxie'''
 
@@ -331,12 +356,15 @@ def minesweeper(n,m,bombs):
                         r = pygame.rect.Rect(pygame.mouse.get_pos(), (1, 1))
                         if squares[i][j]._rect.colliderect(r):
                             if squares[j][i].getClicked() == 0:
+                                fields[j][i].incBombFlagged()
                                 squares[j][i].setImage(flag)
                                 squares[j][i].draw(screen)
                                 squares[j][i].setClicked(2)
+                                checkIfWin(squares, fields, i, j)
                                 pygame.display.update()
 
                             elif squares[j][i].getClicked() == 2:
+                                fields[j][i].decBombFlagged()
                                 squares[j][i].setImage(qmark)
                                 squares[j][i].draw(screen)
                                 squares[j][i].setClicked(3)
@@ -345,6 +373,7 @@ def minesweeper(n,m,bombs):
                                 squares[j][i].setImage(default)
                                 squares[j][i].draw(screen)
                                 squares[j][i].setClicked(0)
+                                checkIfWin(squares, fields, i, j)
                                 pygame.display.update()
                     else:
                            pass#print(squares[i][j]._rect)
