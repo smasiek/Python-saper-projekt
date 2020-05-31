@@ -36,15 +36,15 @@ class Field:
 class Square():
     visibleCount=0
     flaggedCount=0
-    def __init__(self,x,y,height,width,clicked,image):
+    def __init__(self,y,x,height,width,clicked,image):
         '''
         x,y - koordynaty pola
         height,width - wymiary pola
         clicked - 0-nie,1-LPM,2-PPMx1,3-PPMx2
         '''
         self._rect=pygame.rect.Rect(x,y+75,height,width)
-        self._x = x+75
-        self._y = y
+        self._x = x
+        self._y = y+75
         self._height = height
         self._width = width
         self._clicked = clicked
@@ -57,7 +57,7 @@ class Square():
         return int(self._y) #75 = topBarHeight
 
     def draw(self,window):
-        window.blit(self._image, (self.getPxY(),self.getPxX()))
+        window.blit(self._image, (self.getPxX(),self.getPxY()))
 
     #def incVisibleCount(self):
     #    self.visibleCount+=1
@@ -78,13 +78,177 @@ class Square():
     def getClicked(self):
         return self._clicked
 
+    def getRect(self):
+        return self._rect
+
     def getVisibleCount(self):
         return self.visibleCount
 
+#Zainicjowanie zmiennych globalnych n i m oraz bombs
+n=0
+m=0
+bombs=0
+
+def configuration():
+    screen = pygame.display.set_mode((600, 200))
+    font = pygame.font.Font(None, 32)
+    clock = pygame.time.Clock()
+    input_box_n = pygame.Rect(25, 100, 100, 32)
+    input_box_m = pygame.Rect(250, 100, 100, 32)
+    input_box_bombs = pygame.Rect(475, 100, 50, 32)
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color_correct = pygame.Color('forestgreen')
+    color_incorrect = pygame.Color('firebrick1')
+    color_n = color_inactive
+    color_m = color_inactive
+    color_bombs = color_inactive
+    active_n = False
+    active_m = False
+    active_bombs = False
+    text_n = 'Podaj n'
+    text_m = 'Podaj m'
+    text_bombs = 'Bomby'
+    input=[False,False,False]
+    run = True
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                if input[0]==False or input[1]==False or input[2]==False:
+                    pass
+                else:
+                    run = False
+                #pygame.quit()
+
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # If the user clicked on the input_box rect.
+                if not input[0]:
+                    if input_box_n.collidepoint(event.pos):
+                        # Toggle the active variable.
+                        text_n=''
+                        active_n = not active_n
+                    else:
+                        active_n = False
+                        if text_n=='':
+                            text_n = 'Podaj n'
+
+                    color_n = color_active if active_n else color_inactive
+
+                if not input[1]:
+                    if input_box_m.collidepoint(event.pos):
+                        # Toggle the active variable.
+                        text_m = ''
+                        active_m = not active_m
+                    else:
+                        active_m = False
+                        if text_m=='':
+                            text_m = 'Podaj m'
+                    # Change the current color of the input box.
+                    color_m = color_active if active_m else color_inactive
+
+                if not input[2]:
+                    if input_box_bombs.collidepoint(event.pos):
+                        # Toggle the active variable.
+                        text_bombs = ''
+                        active_bombs = not active_bombs
+                    else:
+                        active_bombs = False
+                        if text_bombs=='':
+                            text_bombs = 'Bomby'
+                    # Change the current color of the input box.
+                    color_bombs = color_active if active_bombs else color_inactive
+
+
+            if event.type == pygame.KEYDOWN:
+                if active_n:
+                    if event.key == pygame.K_RETURN:
+
+                        if 2<=int(text_n)<=15:
+                            global n
+                            color_n=color_correct
+                            input[0]=True
+                            print(text_n)
+                            n=int(text_n)
+                            text_n = ''
+                            active_n = not active_n
+                        else:
+                            color_n = color_incorrect
+                            #Rzuca wyjątek - zle dane
+
+
+                    elif event.key == pygame.K_BACKSPACE:
+                        text_n = text_n[:-1]
+                    else:
+                        text_n += event.unicode
+                if active_m:
+                    if event.key == pygame.K_RETURN:
+                        if 2 <= int(text_m) <= 15:
+                            global m
+                            color_m = color_correct
+                            input[1] = True
+                            print(text_m)
+                            m = int(text_m)
+                            text_m = ''
+                            active_m = not active_m
+                        else:
+                            color_m = color_incorrect
+                            # Rzuca wyjątek - zle dane
+                    elif event.key == pygame.K_BACKSPACE:
+                        text_m = text_m[:-1]
+                    else:
+                        text_m += event.unicode
+
+                if active_bombs:
+                    if event.key == pygame.K_RETURN:
+                        if 0 <= int(text_bombs) <= n*m:
+                            global bombs
+                            color_bombs = color_correct
+                            input[2] = True
+                            print(text_bombs)
+                            bombs = int(text_bombs)
+                            text_bombs = ''
+                            active_bombs = not active_bombs
+                        else:
+                            color_bombs = color_incorrect
+                            # Rzuca wyjątek - zle dane
+                    elif event.key == pygame.K_BACKSPACE:
+                        text_bombs = text_bombs[:-1]
+                    else:
+                        text_bombs += event.unicode
+
+
+
+            screen.fill((255, 255, 255))
+            # Render the current text.
+            txt_surface_n = font.render(text_n, True, color_n)
+            txt_surface_m = font.render(text_m, True, color_m)
+            txt_surface_bombs = font.render(text_bombs, True, color_bombs)
+            # Resize the box if the text is too long.
+            width_n = max(200, txt_surface_n.get_width() + 10)
+            width_m = max(200, txt_surface_m.get_width() + 10)
+            width_bombs = max(50, txt_surface_bombs.get_width() + 10)
+            input_box_n.w = width_n
+            input_box_m.w = width_m
+            input_box_bombs.w = width_bombs
+            # Blit the text.
+            screen.blit(txt_surface_n, (input_box_n.x + 5, input_box_n.y + 5))
+            screen.blit(txt_surface_m, (input_box_m.x + 5, input_box_m.y + 5))
+            screen.blit(txt_surface_bombs, (input_box_bombs.x + 5, input_box_bombs.y + 5))
+            # Blit the input_box rect.
+            pygame.draw.rect(screen, color_n, input_box_n, 2)
+            pygame.draw.rect(screen, color_m, input_box_m, 2)
+            pygame.draw.rect(screen, color_bombs, input_box_bombs, 2)
+
+            pygame.display.flip()
+            clock.tick(30)
+
+configuration()
 '''Tu zrobic funkcje ktora w okienku bedzie obslugiwala wpisywanie n i m a potem tworzenie okna, poki co z ręki:'''
-n=3
-m=3
-bombs=5
+#n=4
+#m=9
+#bombs=15
 
 if n < 8 and m < 8:
     squareHeight = 100
@@ -139,38 +303,32 @@ def endGame(squares,fields):
                     squares[i][j].setClicked(1)
     pygame.display.update()
 
-def checkIfWin(squares,fields,i,j):
-    if (m*n)-squares[i][j].visibleCount<=bombs:
-        print('win by click')
+def checkIfWin(squares,fields,x,y):
+    if (m*n)-squares[x][y].visibleCount<=bombs:
+        print('win')
         return endGame(squares, fields)
     if Field.flaggedBombCount==bombs and Square.flaggedCount == bombs:
-        print('win by flagged')
+        print('win')
         return endGame(squares, fields)
 '''koniec metod klasy plansza'''
 
 
-def reveal(squares,fields,i,j):
-    if squares[i][j].getClicked() == 0:
-        if fields[i][j].isBomb():
-            squares[i][j].setImage(bomb)
-            squares[i][j].draw(screen)
-            squares[i][j].setClicked(1)
+def reveal(squares,fields,x,y):
+    if squares[x][y].getClicked() == 0:
+        if fields[x][y].isBomb():
+            squares[x][y].setImage(bomb)
+            squares[x][y].draw(screen)
+            squares[x][y].setClicked(1)
             endGame(squares, fields)
-            """DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY"""
             pygame.display.update()
         else:
-            squares[i][j].setImage(numbers[fields[i][j].getMinesAround()])
-            squares[i][j].draw(screen)
+            squares[x][y].setImage(numbers[fields[x][y].getMinesAround()])
+            squares[x][y].draw(screen)
             #squares[i][j].incVisibleCount()
-            squares[i][j].setClicked(1)
-            """
-             DODAC TUTAJ WARUNEK SPRAWDZAJACY WYGRANA
-                TAK: DODAC TUTAJ FUNKCJE ZAKONCZENIA GRY
-                NIE: PASS
-            """
-            if fields[i][j].getMinesAround() == 0:
-                flood(squares, fields, numbers, screen, i, j, n, m)
-            checkIfWin(squares, fields, i, j)
+            squares[x][y].setClicked(1)
+            if fields[x][y].getMinesAround() == 0:
+                flood(squares, fields, numbers, screen, x, y, n, m)
+            checkIfWin(squares, fields, x, y)
             pygame.display.update()
 
 def flood(squares,fields,numbers,screen,i,j,n,m):
@@ -262,7 +420,7 @@ def printArrayState(array,n,m):
 
 def printMinesAround(array,n,m):
     for i in range(n):
-        for j in range(n):
+        for j in range(m):
             print(array[i][j].getMinesAround(),end=" ")
         print()
 
@@ -275,12 +433,15 @@ def reset():
     minesweeper(n,m,bombs)
 '''Tymczasowe zainicjowanie zmiennych które w przyszłosci będą wprowadzone w textboxie'''
 
+
+
+
 def minesweeper(n,m,bombs):
     '''Ustalenie wymiarów okna'''
 
 
 
-
+#n=4 m=9
     fields=getMatrix(n,m,bombs)
     squares=[[Square(i*squareHeight,j*squareWidth,squareHeight,squareWidth,0,default)for j in range(m)]for i in range(n)]
 
@@ -338,41 +499,46 @@ def minesweeper(n,m,bombs):
                     print(xyzzySequence)
 
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button==1:
-                for i in range(len(squares)):
-                    for j in range(len(squares[i])):
+                #isBreak=False
+                for i in range(n):
+                    for j in range(m):
                         r=pygame.rect.Rect(pygame.mouse.get_pos(),(1,1))
-                        if squares[j][i]._rect.colliderect(r):
+                        if squares[i][j].getRect().colliderect(r):
                             reveal(squares,fields,i,j)
-                        elif squares[j][i].getClicked()==2:
+                            #isBreak=True
+                            break
+                        elif squares[i][j].getClicked()==2:
                                 """Celowe ominiecie reakcji ponieważ oflagowane pole nie moze byc klikniete"""
                                 pass
-                        elif squares[j][i].getClicked()==3:
+                        elif squares[i][j].getClicked()==3:
                                 """Celowe ominiecie reakcji ponieważ pole z pytajnikiem nie moze byc klikniete"""
                                 pass
+                    #if isBreak:
+                        #break
 
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 for i in range(len(squares)):
                     for j in range(len(squares[i])):
                         r = pygame.rect.Rect(pygame.mouse.get_pos(), (1, 1))
                         if squares[i][j]._rect.colliderect(r):
-                            if squares[j][i].getClicked() == 0:
-                                fields[j][i].incBombFlagged()
-                                squares[j][i].setImage(flag)
-                                squares[j][i].draw(screen)
-                                squares[j][i].setClicked(2)
+                            if squares[i][j].getClicked() == 0:
+                                fields[i][j].incBombFlagged()
+                                squares[i][j].setImage(flag)
+                                squares[i][j].draw(screen)
+                                squares[i][j].setClicked(2)
                                 checkIfWin(squares, fields, i, j)
                                 pygame.display.update()
 
-                            elif squares[j][i].getClicked() == 2:
-                                fields[j][i].decBombFlagged()
-                                squares[j][i].setImage(qmark)
-                                squares[j][i].draw(screen)
-                                squares[j][i].setClicked(3)
+                            elif squares[i][j].getClicked() == 2:
+                                fields[i][j].decBombFlagged()
+                                squares[i][j].setImage(qmark)
+                                squares[i][j].draw(screen)
+                                squares[i][j].setClicked(3)
                                 pygame.display.update()
-                            elif squares[j][i].getClicked() == 3:
-                                squares[j][i].setImage(default)
-                                squares[j][i].draw(screen)
-                                squares[j][i].setClicked(0)
+                            elif squares[i][j].getClicked() == 3:
+                                squares[i][j].setImage(default)
+                                squares[i][j].draw(screen)
+                                squares[i][j].setClicked(0)
                                 checkIfWin(squares, fields, i, j)
                                 pygame.display.update()
                     else:

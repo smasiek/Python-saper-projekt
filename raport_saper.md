@@ -45,3 +45,13 @@ na sąsiednich polach, które nie sa bombą
 + Obsługa wygranej
 + Dodanie obsługi kodu "xyzzy" do gry
 + Wygranie przez oflagowanie tylko i wyłącznie bomb
++ Okno wybierania wymiarów pojawiające sie przed rozpoczeciem gry
+    + Weryfikacja poprawności danych 2<=(n,m)<=15
+    + Wszystkie pola musza być uzupelnione (tymczasowa walidacja danych:
+    nie da się wyjść z okna dopóki nie wpisze się poprawnych danych.
+    Po wyjsciu z okna pojawia sie okno gry na podstawie danych)
++ Duży problem z koordynatami
+    + Wczesniejsze testy robiłem na kwadratowym oknie, 
+    przy próbie na prostokątnym wszystko sie posypało a program
+    był juz na tyle rozwinięty, że ciężko było mi znaleźć rozwiązanie.
+    **Finalnie działa**.
