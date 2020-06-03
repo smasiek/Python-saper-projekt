@@ -9,7 +9,7 @@ konstrukcje takie jak:
 + Lambda-wyrażenia
 + List comprehensions
 + Klasy
-+ Wyjątki
++ Wyjątki - rzucany przy złych wymiarach
 + Moduły
 
 #Raport z projektu
@@ -55,3 +55,14 @@ na sąsiednich polach, które nie sa bombą
     przy próbie na prostokątnym wszystko sie posypało a program
     był juz na tyle rozwinięty, że ciężko było mi znaleźć rozwiązanie.
     **Finalnie działa**.
++ Podział programu na moduły zgodnie z założeniami projektu: moduł związany z ***logiką*** i moduł związany z ***interfacem***
++ Dodanie do okna konfiguracji:
+    + Przycisku przejscia do gry
+    + Obsługi tabulatora do poruszania się między inputami
+        + Poruszanie się jest przemyślane tzn. jeśli n lub m juz jest podane to próba tabulacji nie zadziała
+        + Jeśli n i m jest wpisane to pole bomby automatycznie staje sie aktywne - przyspiesza wpisywanie danych 
+        i jest intuicyjne
+        + Jeśli nie zatwierdzimy wpisanego tekstu co zwiększa estetyke i przypomina o zatwierdzaniu danych
+    + Blokady inputu bomby dopóki nie są podane wymiary:
+        + Zmiast łapać wyjątki w których ktoś wpisałby ilosc bomb przed podaniem n i m to blokuje taką możliwość.
+        Myślę, że to lepsza praktyka 
