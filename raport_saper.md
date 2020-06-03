@@ -66,3 +66,4 @@ na sąsiednich polach, które nie sa bombą
     + Blokady inputu bomby dopóki nie są podane wymiary:
         + Zmiast łapać wyjątki w których ktoś wpisałby ilosc bomb przed podaniem n i m to blokuje taką możliwość.
         Myślę, że to lepsza praktyka 
++ Exception handling

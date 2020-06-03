@@ -4,6 +4,38 @@ import graphics.icons as ic
 import logic.fields as fd
 pygame.init()
 
+
+class Error(Exception):
+    pass
+
+'''CLASS INHERITANCE #1'''
+class ZleWymiaryException(Error):
+    def __init__(self,input):
+        self._input=input
+    def __str__(self):
+        return "Podano zle wymiary: {0}. Oczekiwano: 1 < n,m < 16".format(self._input)
+
+'''CLASS INHERITANCE #2'''
+class NullInputException(Error):
+    def __str__(self):
+        return "Nie podano inputu. Oczekiwano cyfry"
+
+'''CLASS INHERITANCE #3'''
+class InvalidInputException(Error):
+    def __init__(self, input):
+        self._input=input
+    def __str__(self):
+        return "Podano zly input: {0}. Oczekiwano cyfry".format(self._input)
+
+'''CLASS INHERITANCE #4'''
+class BombsException(Error):
+    def __init__(self,input):
+        self._input=input
+    def __str__(self):
+        return "Podano zla ilosc bomb: {0}. Oczekiwano: 0 < bombs <= n*m".format(self._input)
+
+
+
 class GameWindow:
     def __init__(self,n,m,topBarHeight):
         '''LAMBDA #x'''
@@ -221,24 +253,57 @@ def configuration():
             if (lambda ev: event.type == ev)(pygame.KEYDOWN):
                 if active_n:
                     if event.key == pygame.K_RETURN:
-                        if 2<=int(text_n)<=15:
-                            color_n=color_correct
-                            input[0]=True
-                            print(text_n)
-                            n=int(text_n)
-                            active_n = not active_n
-                            if not input[1]:
-                                active_n = False
-                                active_m = True
-                                text_m = ''
-                                color_m = color_active
-                                pygame.display.flip()
-                                break
-                        else:
+                        try:
+                            if text_n=="":
+                                raise NullInputException
+                        except NullInputException as nie:
+                            print(nie)
                             color_n = color_incorrect
-                            #Rzuca wyjątek - zle dane
-                        if input[0] and input[1]:
-                            color_bombs = color_inactive
+                            active_n = False
+                            text_n = 'Podaj liczbe!'
+                            break
+                        try:
+                            isDigit=True
+                            for i in range(len(text_n)):
+                                if not text_n[i].isdigit():
+                                    isDigit=False
+                                    break
+                            if not isDigit:
+                                raise InvalidInputException(text_n)
+                        except InvalidInputException as ve:
+                            print(ve)
+                            color_n = color_incorrect
+                            active_n = False
+                            text_n = 'Podaj liczbe!'
+                            break
+                        try:
+                            if 2<=int(text_n)<=15:
+                                color_n=color_correct
+                                input[0]=True
+                                print(text_n)
+                                n=int(text_n)
+                                active_n = not active_n
+                                if not input[1]:
+                                    active_n = False
+                                    active_m = True
+                                    text_m = ''
+                                    color_m = color_active
+                                    pygame.display.flip()
+                                    break
+                            else:
+                                raise ZleWymiaryException(text_n)
+                                #Rzuca wyjątek - zle dane
+
+                            if input[0] and input[1]:
+                                color_bombs = color_inactive
+                        except ZleWymiaryException as e:
+                            print(e)
+                            color_n = color_incorrect
+                            active_n = False
+                            text_n = 'Zły wymiar! 1<n<16'
+                            break
+
+
                     elif event.key == pygame.K_BACKSPACE:
                         text_n = text_n[:-1]
                     elif event.key == pygame.K_TAB:
@@ -256,24 +321,53 @@ def configuration():
 
                 if active_m:
                     if event.key == pygame.K_RETURN:
-                        if 2 <= int(text_m) <= 15:
-                            color_m = color_correct
-                            input[1] = True
-                            print(text_m)
-                            m = int(text_m)
-                            active_m = not active_m
-                            if input[0]:
-                                active_m = False
-                                active_bombs = True
-                                text_bombs = ''
-                                color_bombs = color_active
-                                pygame.display.flip()
-                                break
-                        else:
+                        try:
+                            if text_m=="":
+                                raise NullInputException
+                        except NullInputException as nie:
+                            print(nie)
                             color_m = color_incorrect
-                            # Rzuca wyjątek - zle dane
-                        if input[0] and input[1]:
-                            color_bombs = color_inactive
+                            active_m = False
+                            text_m = 'Podaj liczbe!'
+                            break
+                        try:
+                            isDigit = True
+                            for i in range(len(text_m)):
+                                if not text_m[i].isdigit():
+                                    isDigit = False
+                                    break
+                            if not isDigit:
+                                raise InvalidInputException(text_m)
+                        except InvalidInputException as ve:
+                            print(ve)
+                            color_m = color_incorrect
+                            active_m = False
+                            text_m = 'Podaj liczbe!'
+                            break
+                        try:
+                            if 2 <= int(text_m) <= 15:
+                                color_m = color_correct
+                                input[1] = True
+                                print(text_m)
+                                m = int(text_m)
+                                active_m = not active_m
+                                if input[0]:
+                                    active_m = False
+                                    active_bombs = True
+                                    text_bombs = ''
+                                    color_bombs = color_active
+                                    pygame.display.flip()
+                                    break
+                            else:
+                                raise ZleWymiaryException(text_m)
+                                # Rzuca wyjątek - zle dane
+                            if input[0] and input[1]:
+                                color_bombs = color_inactive
+                        except ZleWymiaryException as e:
+                            print(e)
+                            color_m = color_incorrect
+                            active_m = False
+                            text_m = 'Zły wymiar! 1<m<16'
                     elif event.key == pygame.K_BACKSPACE:
                         text_m = text_m[:-1]
                     elif event.key == pygame.K_TAB:
@@ -291,19 +385,48 @@ def configuration():
                 if active_bombs:
                     if input[0] and input[1]:
                         if event.key == pygame.K_RETURN:
-                            if 0 <= int(text_bombs) <= n*m:
-                                #global bombs
-                                color_bombs = color_correct
-                                input[2] = True
-                                print(text_bombs)
-                                bombs = int(text_bombs)
-                                #text_bombs = ''
-                                active_bombs = not active_bombs
-                            else:
+                            try:
+                                if text_bombs == "":
+                                    raise NullInputException
+                            except NullInputException as nie:
+                                print(nie)
                                 color_bombs = color_incorrect
-                                # Rzuca wyjątek - zle dane
-                            if input[0] and input[1] and input[2]:
-                                ok = pygame.image.load("icons\\accept.png")
+                                active_bombs = False
+                                text_bombs = 'Podaj liczbe!'
+                                break
+                            try:
+                                isDigit = True
+                                for i in range(len(text_bombs)):
+                                    if not text_bombs[i].isdigit():
+                                        isDigit = False
+                                        break
+                                if not isDigit:
+                                    raise InvalidInputException(text_bombs)
+                            except InvalidInputException as ve:
+                                print(ve)
+                                color_bombs = color_incorrect
+                                active_bombs = False
+                                text_bombs = 'Podaj liczbe!'
+                                break
+                            try:
+                                if 0 <= int(text_bombs) <= n*m:
+                                    #global bombs
+                                    color_bombs = color_correct
+                                    input[2] = True
+                                    print(text_bombs)
+                                    bombs = int(text_bombs)
+                                    #text_bombs = ''
+                                    active_bombs = not active_bombs
+                                else:
+                                    raise BombsException(text_bombs)
+                                if input[0] and input[1] and input[2]:
+                                    ok = pygame.image.load("icons\\accept.png")
+                            except BombsException as be:
+                                print(be)
+                                color_bombs = color_incorrect
+                                active_bombs = False
+                                text_bombs = '0<bombs<n*m!'
+                                break
                         elif event.key == pygame.K_BACKSPACE:
                             text_bombs = text_bombs[:-1]
                         else:
