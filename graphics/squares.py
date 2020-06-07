@@ -1,5 +1,7 @@
 import pygame
 
+
+
 class Square():
     visibleCount=0
     flaggedCount=0
@@ -23,6 +25,9 @@ class Square():
     def getPxY(self):
         return int(self._y) #75 = topBarHeight
 
+    def getSize(self):
+        return self._height
+
     def draw(self,screen):
         screen.blit(self._image, (self.getPxX(),self.getPxY()))
 
@@ -33,14 +38,25 @@ class Square():
         self._image=image
 
     def setClicked(self,click):
-        self._clicked=click
+
         if click==1:
+
+            self._clicked = click
             Square.visibleCount += 1
         if click==2:
+            self._clicked = click
             Square.flaggedCount += 1
-        if click==0:
+            #Square.visibleCount += 1 #test do usuniecia
+
+        if click==3:
+            self._clicked = click
             Square.flaggedCount -= 1
-        #print("Flagged count:" ,Square.flaggedCount)
+        if click==0:
+            self._clicked = click
+
+            #Square.visibleCount -= 1 #test do timera do usuniecia jesl nie dziala
+        print("Flagged count:" ,Square.flaggedCount)
+        print(Square.visibleCount)
 
     def getClicked(self):
         return self._clicked
@@ -50,3 +66,7 @@ class Square():
 
     def getVisibleCount(self):
         return self.visibleCount
+
+    def resetFlaggedCount(self):
+        Square.flaggedCount=0
+

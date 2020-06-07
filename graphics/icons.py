@@ -1,5 +1,6 @@
 import pygame
 
+icon=pygame.image.load("icons\\icon.png")
 zero=pygame.image.load("icons\\blank.png")
 one=pygame.image.load("icons\\1.png")
 two=pygame.image.load("icons\\2.png")
@@ -17,5 +18,8 @@ qmark=pygame.image.load("icons\\qmark.png")
 default=pygame.image.load("icons\\def.png")
 ok=pygame.image.load("icons\\accept.png")
 okIn=pygame.image.load("icons\\acceptIn.png")
+cat=pygame.image.load("icons\\cat.png")
+catWin=pygame.image.load("icons\\catWin.png")
+catLose=pygame.image.load("icons\\catLose.png")
 
 numbers=[zero,one,two,three,four,five,six,seven,eight]

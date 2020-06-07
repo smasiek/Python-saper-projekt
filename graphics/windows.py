@@ -1,7 +1,10 @@
 import pygame
 import graphics.squares as sq
-import graphics.icons as ic
 import logic.fields as fd
+import graphics.iconsBig as icB
+import graphics.icons as ic
+
+#import graphics.icons as ic
 pygame.init()
 
 
@@ -34,7 +37,53 @@ class BombsException(Error):
     def __str__(self):
         return "Podano zla ilosc bomb: {0}. Oczekiwano: 0 < bombs <= n*m".format(self._input)
 
+class Timer:
+    def __init__(self,start,time,x,y):
+        self._x=x
+        self._y=y
+        self._start=start
+        self._time=str(time)
+        self._timeWindow=pygame.Rect(25, 25, 50, 32)
+        self._font = pygame.font.Font(None, 32)
+        self._color = pygame.Color('dodgerblue2')
 
+    def setTime(self,start,time,screen):
+        self._start = start
+        self._time=str(time)
+        txt_surface =self._font.render(self._time, True, self._color)
+        screen.blit(txt_surface, (self._timeWindow.x + 5, self._timeWindow.y + 5))
+        pygame.draw.rect(screen, self._color, self._timeWindow, 2)
+        pygame.display.flip()
+
+    def updateTime(self,time,screen):
+        self._time=str(time)
+        txt_surface =self._font.render(self._time, True, self._color)
+        screen.blit(txt_surface, (self._timeWindow.x + 5, self._timeWindow.y + 5))
+        screen.blit(txt_surface, (self._timeWindow.x + 5, self._timeWindow.y + 5))
+        pygame.draw.rect(screen, self._color, self._timeWindow, 2)
+        pygame.display.flip()
+
+    def drawTimer(self,screen):
+        txt_surface = self._font.render(self._time, True, self._color)
+        screen.blit(txt_surface, (self._timeWindow.x + 5, self._timeWindow.y + 5))
+        pygame.draw.rect(screen, self._color, self._timeWindow, 2)
+
+    def getTime(self):
+        return self._time
+
+class Cat:
+    def __init__(self,x,y):
+        self._x = x
+        self._y = y
+        self._width=60
+        self._height=60
+        self._img=self._rect=pygame.rect.Rect(self._x,self._y,self._height,self._width)
+
+    def setCat(self,screen,icon):
+        screen.blit(icon, (self._x, self._y))
+
+    def getCat(self):
+        return self._img
 
 class GameWindow:
     def __init__(self,n,m,topBarHeight):
@@ -42,32 +91,55 @@ class GameWindow:
         self.squareHeight = (lambda n,m:100 if  n < 8 and m < 8 else 60)(n,m)
         self.squareWidth = (lambda n,m:100 if  n < 8 and m < 8 else 60)(n,m)
         self.topBar = topBarHeight
-        '''LAMBDA #y'''
-        self.height=(lambda n1,m1: 100*n1+topBarHeight if  n1 < 8 and m1 < 8 else 60*n1+topBarHeight)(n,m)
-        self.width=(lambda n1,m1:100*m1 if  n1 < 8 and m1 < 8 else 60*m1)(n,m)
+        self.height=self.squareHeight*n+self.topBar
+        self.width=self.squareWidth*m
         self.window=pygame.display
         self.screen=pygame.display
+        self._timer=Timer(0,0,5,5)
+        self._cat=Cat(self.width//2.2,15)
+        self._started=False
+
         '''LIST COMPREHENSIONS #3'''
-        self.squares=[[sq.Square(i*self.squareHeight,j*self.squareWidth,self.squareHeight,self.squareWidth,0,ic.default)for j in range(m)]for i in range(n)]
+        if self.squareHeight>60:
+            self.squares=[[sq.Square(i*self.squareHeight,j*self.squareWidth,self.squareHeight,self.squareWidth,0,icB.default)for j in range(m)]for i in range(n)]
+        else:
+            self.squares = [[sq.Square(i * self.squareHeight, j * self.squareWidth, self.squareHeight, self.squareWidth,0, ic.default) for j in range(m)] for i in range(n)]
 
     def resetSquares(self):
         n = len(self.squares)
         m = len(self.squares[0])
-        self.squares = [[sq.Square(i * self.squareHeight, j * self.squareWidth, self.squareHeight, self.squareWidth, 0, ic.default)for j in range(m)] for i in range(n)]
+        if self.squareHeight>60:
+            self.squares=[[sq.Square(i*self.squareHeight,j*self.squareWidth,self.squareHeight,self.squareWidth,0,icB.default)for j in range(m)]for i in range(n)]
+        else:
+            self.squares = [[sq.Square(i * self.squareHeight, j * self.squareWidth, self.squareHeight, self.squareWidth,0, ic.default) for j in range(m)] for i in range(n)]
+
+        #self.squares = [[sq.Square(i * self.squareHeight, j * self.squareWidth, self.squareHeight, self.squareWidth, 0, ic.default)for j in range(m)] for i in range(n)]
 
     def endGame(self,fields):
         for i in range(len(self.squares)):
             for j in range(len(self.squares[0])):
-                if self.squares[i][j].getClicked() == 0 or self.squares[i][j].getClicked() == 2 or self.squares[i][
-                    j].getClicked() == 3:
+                if self.squares[i][j].getClicked() == 0 or self.squares[i][j].getClicked() == 2 or self.squares[i][j].getClicked() == 3:
                     if fields[i][j].isBomb():
-                        self.squares[i][j].setImage(ic.bomb)
+                        if self.squares[i][j].getSize() > 60:
+                            self.squares[i][j].setImage(icB.bomb)
+                        else:
+                            self.squares[i][j].setImage(ic.bomb)
+                        #self.squares[i][j].setImage(ic.bomb)
                         self.squares[i][j].draw(self.screen)
+                        #self.squares[i][j].resetFlaggedCount()
                         self.squares[i][j].setClicked(1)
+
                     else:
-                        self.squares[i][j].setImage(ic.numbers[fields[i][j].getMinesAround()])
+                        if self.squares[i][j].getSize() > 60:
+                            self.squares[i][j].setImage(icB.numbers[fields[i][j].getMinesAround()])
+                        else:
+                            self.squares[i][j].setImage(ic.numbers[fields[i][j].getMinesAround()])
+
                         self.squares[i][j].draw(self.screen)
+
                         self.squares[i][j].setClicked(1)
+        self.squares[0][0].resetFlaggedCount()
+        self._started = False
         pygame.display.update()
 
     def checkIfWin(self, fields, x, y,bombs):
@@ -75,23 +147,33 @@ class GameWindow:
         m=len(self.squares[0])
         if (m * n) - self.squares[x][y].visibleCount <= bombs:
             print('win')
+            self._cat.setCat(self.screen, ic.catWin)
             return self.endGame(fields)
         if fd.Field.flaggedBombCount == bombs and sq.Square.flaggedCount == bombs:
             print('win')
+            self._cat.setCat(self.screen, ic.catWin)
             return self.endGame(fields)
 
     def reveal(self, fields, x, y,bombs):
         if self.squares[x][y].getClicked() == 0:
             if fields[x][y].isBomb():
-                self.squares[x][y].setImage(ic.bomb)
+                self._cat.setCat(self.screen, ic.catLose)
+                if self.squares[x][y].getSize()>60:
+                    self.squares[x][y].setImage(icB.bomb)
+                else:
+                    self.squares[x][y].setImage(ic.bomb)
                 self.squares[x][y].draw(self.screen)
                 self.squares[x][y].setClicked(1)
                 self.endGame(fields)
                 pygame.display.update()
             else:
-                self.squares[x][y].setImage(ic.numbers[fields[x][y].getMinesAround()])
+                if self.squares[x][y].getSize()>60:
+                    self.squares[x][y].setImage(icB.numbers[fields[x][y].getMinesAround()])
+                else:
+                    self.squares[x][y].setImage(ic.numbers[fields[x][y].getMinesAround()])
+
                 self.squares[x][y].draw(self.screen)
-                # squares[i][j].incVisibleCount()
+                self.squares[x][y].visibleCount+=1
                 self.squares[x][y].setClicked(1)
                 if fields[x][y].getMinesAround() == 0:
                     self.flood(fields, x, y, bombs)
@@ -117,18 +199,26 @@ class GameWindow:
             for j in range(m):
                 if fields[i][j].isBomb():
                     if not self.squares[i][j].getClicked() == 2:
-                        self.squares[i][j].setImage(ic.xyzz)
+                        if self.squares[i][j].getSize() > 60:
+                            self.squares[i][j].setImage(icB.xyzz)
+                        else:
+                            self.squares[i][j].setImage(ic.xyzz)
                         self.squares[i][j].draw(self.screen)
                     else:
-                        self.squares[i][j].setImage(ic.flaggedxyzz)
+                        if self.squares[i][j].getSize() > 60:
+                            self.squares[i][j].setImage(icB.flaggedxyzz)
+                        else:
+                            self.squares[i][j].setImage(ic.flaggedxyzz)
                         self.squares[i][j].draw(self.screen)
-        pygame.display.update()
+        pygame.display.flip()
 
     def drawScene(self):
 
         for i in range(len(self.squares)):
             for j in range(len(self.squares[i])):
                 self.squares[i][j].draw(self.window)
+        self._cat.setCat(self.screen, ic.cat)
+        self._timer.drawTimer(self.screen)
 
     def clearWindow(self):
         self.window.fill((255, 255, 255))
@@ -140,12 +230,22 @@ class GameWindow:
 
     def setScreen(self):
         self.screen = pygame.display.get_surface()
+        self._timer.setTime(0, 0, self.screen)
+
+    def setStarted(self):
+        self._started=True
+
+    def resetStarted(self):
+        self._started=False
 
     def getWindow(self):
         return self.window
 
     def getScreen(self):
         return self.screen
+
+    def getTimer(self):
+        return self._timer
 
     def getSquareH(self):
         return self.squareHeight
@@ -156,9 +256,16 @@ class GameWindow:
     def getSquares(self):
         return self.squares
 
+    def getCat(self):
+        return self._cat
+
+    def getStarted(self):
+        return self._started
 
 
 def configuration():
+    pygame.display.set_caption("Konfiguracja sapera")
+    pygame.display.set_icon(ic.icon)
     height=180
     width=600
     res=(width, height)

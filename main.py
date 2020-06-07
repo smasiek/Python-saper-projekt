@@ -3,6 +3,7 @@ import random
 import pygame
 import logic.fields as fd
 import graphics.icons as ic
+import graphics.iconsBig as icB
 import graphics.windows as wd
 import graphics.squares as sq
 #from graphics.windows import configuration as conf
@@ -23,6 +24,8 @@ def printMinesAround(array,n,m):
 
 def reset():
     gameWindow.clearWindow()
+    gameWindow.resetStarted()
+    gameWindow.getTimer().updateTime(0,gameWindow.getScreen())
     fd.Field.flaggedBombCount = 0
     sq.Square.visibleCount = 0
     sq.Square.flaggedCount = 0
@@ -33,9 +36,12 @@ def minesweeper(n,m,bombs):
     fields=fd.getMatrix(n,m,bombs)
     gameWindow.resetSquares()
     squares = gameWindow.getSquares()
-    gameWindow.drawScene()
 
-    pygame.display.update()
+    timer=pygame.time.Clock()
+    startTime=0
+    clickTime=0
+    gameWindow.drawScene()
+    pygame.display.flip()
     run=True
     """Pomoc przy debugowaniu:"""
     printArrayState(fields, n, m)
@@ -85,12 +91,22 @@ def minesweeper(n,m,bombs):
                     print(xyzzySequence)
                 '''LAMBDA #6'''
             elif (lambda ev,evb: event.type == ev and event.button==evb)(pygame.MOUSEBUTTONDOWN,1):
-                #isBreak=False
+
+
+                if gameWindow.getCat().getCat().collidepoint(event.pos):
+                    run = False
+                    reset()
                 for i in range(n):
                     for j in range(m):
                         if squares[i][j].getRect().collidepoint(event.pos):
+                            if gameWindow.squares[0][0].visibleCount == 0 and not gameWindow.getStarted():
+                                # print(gameWindow.squares[0][0].visibleCount)
+                                startTime = pygame.time.get_ticks()
+                                clickTime = pygame.time.get_ticks()
+                                time = int(startTime - clickTime)
+                                gameWindow._timer.updateTime(time, gameWindow.getScreen())
+                                gameWindow.getStarted()
                             gameWindow.reveal(fields,i,j,bombs)
-                            #isBreak=True
                             break
                         elif squares[i][j].getClicked()==2:
                                 """Celowe ominiecie reakcji ponieważ oflagowane pole nie moze byc klikniete"""
@@ -98,45 +114,78 @@ def minesweeper(n,m,bombs):
                         elif squares[i][j].getClicked()==3:
                                 """Celowe ominiecie reakcji ponieważ pole z pytajnikiem nie moze byc klikniete"""
                                 pass
-                    #if isBreak:
-                        #break
+
                 '''LAMBDA #7'''
             elif (lambda ev,evb: event.type == ev and event.button==evb)(pygame.MOUSEBUTTONDOWN,3):
+
                 for i in range(len(squares)):
                     for j in range(len(squares[i])):
                         if squares[i][j].getRect().collidepoint(event.pos):
-                            if squares[i][j].getClicked() == 0:
-                                fields[i][j].incBombFlagged()
-                                squares[i][j].setImage(ic.flag)
-                                squares[i][j].draw(screen)
-                                squares[i][j].setClicked(2)
-                                gameWindow.checkIfWin(fields, i, j,bombs)
-                                pygame.display.update()
+                                if not gameWindow.getStarted() and not gameWindow.squares[0][0].visibleCount == n*m:
+                                    # print(gameWindow.squares[0][0].visibleCount)
+                                    startTime = pygame.time.get_ticks()
+                                    clickTime = pygame.time.get_ticks()
+                                    time = int(startTime - clickTime)
+                                    gameWindow._timer.updateTime(time, gameWindow.getScreen())
+                                    gameWindow.setStarted()
+                                    print("test dsadas", gameWindow.squares[0][0].visibleCount)
+                                if gameWindow.getStarted():
+                                    print("test ",gameWindow.squares[0][0].visibleCount)
+                                    if squares[i][j].getClicked() == 0:
+                                        fields[i][j].incBombFlagged()
+                                        if squares[i][j].getSize()>60:
+                                            squares[i][j].setImage(icB.flag)
+                                        else:
+                                            squares[i][j].setImage(ic.flag)
+                                        squares[i][j].draw(screen)
+                                        squares[i][j].setClicked(2)
+                                        gameWindow.checkIfWin(fields, i, j,bombs)
+                                        pygame.display.flip()
 
-                            elif squares[i][j].getClicked() == 2:
-                                fields[i][j].decBombFlagged()
-                                squares[i][j].setImage(ic.qmark)
-                                squares[i][j].draw(screen)
-                                squares[i][j].setClicked(3)
-                                pygame.display.update()
-                            elif squares[i][j].getClicked() == 3:
-                                squares[i][j].setImage(ic.default)
-                                squares[i][j].draw(screen)
-                                squares[i][j].setClicked(0)
-                                gameWindow.checkIfWin(fields, i, j,bombs)
-                                pygame.display.update()
+                                    elif squares[i][j].getClicked() == 2:
+                                        fields[i][j].decBombFlagged()
+                                        if squares[i][j].getSize()>60:
+                                            squares[i][j].setImage(icB.qmark)
+                                        else:
+                                            squares[i][j].setImage(ic.qmark)
+                                        #squares[i][j].setImage(ic.qmark)
+                                        squares[i][j].draw(screen)
+                                        squares[i][j].setClicked(3)
+                                        pygame.display.flip()
+                                    elif squares[i][j].getClicked() == 3:
+                                        if squares[i][j].getSize()>60:
+                                            squares[i][j].setImage(icB.default)
+                                        else:
+                                            squares[i][j].setImage(ic.default)
+                                        #squares[i][j].setImage(ic.default)
+                                        squares[i][j].draw(screen)
+                                        squares[i][j].setClicked(0)
+                                        gameWindow.checkIfWin(fields, i, j,bombs)
+                                        pygame.display.update()
                     else:
                            pass
+        screen.fill((255, 255, 255))
+        gameWindow.drawScene()
 
+        if  gameWindow.getStarted() and gameWindow.squares[0][0].visibleCount!=0 and gameWindow.squares[0][0].visibleCount!=n*m:
+            #print(gameWindow.getStarted()," ", gameWindow.squares[0][0].visibleCount, " ", n*m)
+            clickTime = pygame.time.get_ticks()
+            time = int(clickTime-startTime)//1000
+            gameWindow._timer.updateTime(time, gameWindow.getScreen())
+        timer.tick(60)
 
 n,m,bombs=wd.configuration()
 topBarHeight=75
+
+
 
 gameWindow = wd.GameWindow(n, m, topBarHeight)
 gameWindow.setWindow()
 window=gameWindow.getWindow()
 gameWindow.setScreen()
 screen=gameWindow.getScreen()
+pygame.display.set_caption("Saper")
+pygame.display.set_icon(ic.icon)
 squareHeight=gameWindow.getSquareH()
 squareWidth=gameWindow.getSquareW()
 
