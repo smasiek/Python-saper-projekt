@@ -1,13 +1,11 @@
 '''Importowane biblioteki'''
-import random
 import pygame
 import logic.fields as fd
 import graphics.icons as ic
 import graphics.iconsBig as icB
 import graphics.windows as wd
 import graphics.squares as sq
-#from graphics.windows import configuration as conf
-#from pygame.locals import *
+
 pygame.init()
 
 def printArrayState(array,n,m):
@@ -53,7 +51,7 @@ def minesweeper(n,m,bombs):
         for event in pygame.event.get():
             '''LAMBDA #4'''
             if (lambda ev: event.type == ev)(pygame.QUIT):
-                run = False
+                #run = False
                 pygame.quit()
                 '''LAMBDA #5'''
             elif (lambda ev: event.type == ev)(pygame.KEYDOWN):
@@ -128,9 +126,7 @@ def minesweeper(n,m,bombs):
                                     time = int(startTime - clickTime)
                                     gameWindow._timer.updateTime(time, gameWindow.getScreen())
                                     gameWindow.setStarted()
-                                    print("test dsadas", gameWindow.squares[0][0].visibleCount)
                                 if gameWindow.getStarted():
-                                    print("test ",gameWindow.squares[0][0].visibleCount)
                                     if squares[i][j].getClicked() == 0:
                                         fields[i][j].incBombFlagged()
                                         if squares[i][j].getSize()>60:
@@ -174,20 +170,18 @@ def minesweeper(n,m,bombs):
             gameWindow._timer.updateTime(time, gameWindow.getScreen())
         timer.tick(60)
 
-n,m,bombs=wd.configuration()
-topBarHeight=75
+if __name__ == '__main__':
+    n,m,bombs=wd.configuration()
+    topBarHeight=75
 
+    gameWindow = wd.GameWindow(n, m, topBarHeight)
+    gameWindow.setWindow()
+    window=gameWindow.getWindow()
+    gameWindow.setScreen()
+    screen=gameWindow.getScreen()
+    pygame.display.set_caption("Saper")
+    pygame.display.set_icon(ic.icon)
+    squareHeight=gameWindow.getSquareH()
+    squareWidth=gameWindow.getSquareW()
 
-
-gameWindow = wd.GameWindow(n, m, topBarHeight)
-gameWindow.setWindow()
-window=gameWindow.getWindow()
-gameWindow.setScreen()
-screen=gameWindow.getScreen()
-pygame.display.set_caption("Saper")
-pygame.display.set_icon(ic.icon)
-squareHeight=gameWindow.getSquareH()
-squareWidth=gameWindow.getSquareW()
-
-
-minesweeper(n,m,bombs)
+    minesweeper(n,m,bombs)

@@ -19,11 +19,9 @@ class Field:
     def incBombFlagged(self):
         if self._isBomb:
             Field.flaggedBombCount +=1
-            print("Oznaczono bombe, count", Field.flaggedBombCount)
     def decBombFlagged(self):
         if self.isBomb():
             Field.flaggedBombCount -=1
-            print("Odznaczono bombe, count", Field.flaggedBombCount)
     def isBomb(self):
         return self._isBomb
     def getMinesAround(self):

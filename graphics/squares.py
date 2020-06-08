@@ -39,24 +39,22 @@ class Square():
 
     def setClicked(self,click):
 
-        if click==1:
+        if self._clicked!=1:
+            if click==1:
+                self._clicked = click
+                Square.visibleCount += 1
+            elif click==2:
+                self._clicked = click
+                Square.flaggedCount += 1
+                #Square.visibleCount += 1 #test do usuniecia
 
-            self._clicked = click
-            Square.visibleCount += 1
-        if click==2:
-            self._clicked = click
-            Square.flaggedCount += 1
-            #Square.visibleCount += 1 #test do usuniecia
-
-        if click==3:
-            self._clicked = click
-            Square.flaggedCount -= 1
-        if click==0:
-            self._clicked = click
+            elif click==3:
+                self._clicked = click
+                Square.flaggedCount -= 1
+            elif click==0:
+                self._clicked = click
 
             #Square.visibleCount -= 1 #test do timera do usuniecia jesl nie dziala
-        print("Flagged count:" ,Square.flaggedCount)
-        print(Square.visibleCount)
 
     def getClicked(self):
         return self._clicked
