@@ -56,11 +56,9 @@ def minesweeper(n, m, bombs):
     xyzzy_sequence = [False, False, False, False, False]
     while run:
         for event in pygame.event.get():
-            '''LAMBDA #4'''
             if (lambda ev: event.type == ev)(pygame.QUIT):
                 run = False
                 pygame.quit()
-                '''LAMBDA #5'''
             elif (lambda ev: event.type == ev)(pygame.KEYDOWN):
                 keys = pygame.key.get_pressed()
 
@@ -89,7 +87,6 @@ def minesweeper(n, m, bombs):
                     for i in xyzzy_sequence:
                         i = False
 
-                '''LAMBDA #6'''
             elif (lambda ev, evb: event.type == ev and event.button == evb)(pygame.MOUSEBUTTONDOWN, 1):
 
                 if game_window.get_cat().get_cat().collidepoint(event.pos):
@@ -108,7 +105,6 @@ def minesweeper(n, m, bombs):
                             game_window.reveal(fields, i, j, bombs)
                             break
 
-                '''LAMBDA #7'''
             elif (lambda ev, evb: event.type == ev and event.button == evb)(pygame.MOUSEBUTTONDOWN, 3):
 
                 for i in range(len(squares)):

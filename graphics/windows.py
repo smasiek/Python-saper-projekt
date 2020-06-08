@@ -14,9 +14,6 @@ class Error(Exception):
     """Abstract class to be inherited by other exception classes."""
 
 
-'''CLASS INHERITANCE #1'''
-
-
 class ZleWymiaryException(Error):
     """Throw exception when size of game window is invalid."""
 
@@ -27,17 +24,11 @@ class ZleWymiaryException(Error):
         return "Podano zle wymiary: {0}. Oczekiwano: 1 < n,m < 16".format(self._input)
 
 
-'''CLASS INHERITANCE #2'''
-
-
 class NullInputException(Error):
     """Throw exception when there's no input."""
 
     def __str__(self):
         return "Nie podano inputu. Oczekiwano cyfry"
-
-
-'''CLASS INHERITANCE #3'''
 
 
 class InvalidInputException(Error):
@@ -48,9 +39,6 @@ class InvalidInputException(Error):
 
     def __str__(self):
         return "Podano zly input: {0}. Oczekiwano cyfry".format(self._input)
-
-
-'''CLASS INHERITANCE #4'''
 
 
 class BombsException(Error):
@@ -138,7 +126,6 @@ class GameWindow:
         self._cat = Cat(self.width // 2.2, 15)
         self._started = False
 
-        '''LIST COMPREHENSIONS #3'''
         # Set icon depending on size of square.
         if self.square_height > 60:
             self.squares = [[sq.Square(i * self.square_height, j * self.square_width,
@@ -169,8 +156,9 @@ class GameWindow:
         """End game by clicking every unclicked square"""
         for i in range(len(self.squares)):
             for j in range(len(self.squares[0])):
-                if self.squares[i][j].get_clicked() == 0 or self.squares[i][
-                    j].get_clicked() == 2 or self.squares[i][j].get_clicked() == 3:
+                if self.squares[i][j].get_clicked() == 0 or\
+                        self.squares[i][j].get_clicked() == 2 or\
+                        self.squares[i][j].get_clicked() == 3:
                     if fields[i][j].is_bomb():
                         if self.squares[i][j].get_size() > 60:
                             self.squares[i][j].set_image(ic_b.bomb)
@@ -377,12 +365,9 @@ def configuration():
 
     while run:
         for event in pygame.event.get():
-            '''LAMBDA #1'''
             if (lambda ev: event.type == ev)(pygame.QUIT):
                 run = False
                 pygame.quit()
-
-            '''LAMBDA #2'''
 
             if (lambda ev: event.type == ev)(pygame.MOUSEBUTTONDOWN):
                 # If the user clicked on the input_box rect.
@@ -434,7 +419,6 @@ def configuration():
                         # Change the current color of the input box.
                         color_bombs = color_active if active_bombs else color_inactive
 
-            '''LAMBDA #3'''
             if (lambda ev: event.type == ev)(pygame.KEYDOWN):
                 if active_n:
                     if event.key == pygame.K_RETURN:
