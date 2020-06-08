@@ -48,15 +48,15 @@ na sąsiednich polach, które nie sa bombą
         + Poruszanie się jest przemyślane tzn. jeśli n lub m juz jest podane to próba tabulacji nie zadziała
         + Jeśli n i m jest wpisane to pole bomby automatycznie staje sie aktywne - przyspiesza wpisywanie danych 
         i jest intuicyjne
-        + Jeśli nie zatwierdzimy wpisanego tekstu co zwiększa estetyke i przypomina o zatwierdzaniu danych
+        + Jeśli nie zatwierdzimy wpisanego tekstu to ten zeruje się po dezaktywacji inputu co zwiększa estetyke i przypomina o zatwierdzaniu danych
     + Blokady inputu bomby dopóki nie są podane wymiary:
         + Zmiast łapać wyjątki w których ktoś wpisałby ilosc bomb przed podaniem n i m to blokuje taką możliwość.
         Myślę, że to lepsza praktyka 
 + Exception handling
 + Dodanie timer'a do okna gry
     + Problem: Odpowiednie resetowanie i ustawianie timera podczas pierwszego kliknięcia oflagowania
-        + Rozwiązanie: Dodanie pola _started symbolizującego rozpoczęcie/zakonczenie gry i timera
-+ Dodanie kota który jest odpowiednikiem słoneczka z oryginalnej wersji sapera
+        + Rozwiązanie: Dodanie do GameWindow pola _started symbolizującego rozpoczęcie/zakonczenie gry i timera
++ Dodanie kota który jest odpowiednikiem słoneczka z oryginalnej wersji sapera, można nim resetowac gre (albo 'r' z klawiatury)
 + Obsługa większych ikon przy wybraniu planszy mniejszej niz 8
 + Dodanie nazwy okna i ikon
 + Dodanie komentarzy i docstringów
@@ -87,18 +87,18 @@ na sąsiednich polach, które nie sa bombą
         + [#5 Square](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/squares.py#L4-L70)
         + [#6 Field](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/logic/fields.py#L5-L39)
     + Wyjątki:
-        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L17-L24)
+        + [#1 ZleWymiaryException](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L17-L24)
             + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L468)
-        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L27-L31)
+        + [#2 NullInputException](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L27-L31)
             + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L428)
-        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L34-L41)
+        + [#3 InvalidInputException](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L34-L41)
             + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L443)
-        + [#4](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L44-L51)
+        + [#4 BombsException](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L44-L51)
             + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L599)
      + Moduły:
         + Logika:
             + [Fields](https://github.com/smasiek/Python-saper-projekt/blob/master/logic/fields.py)
-        + Grafika:
+        + Interface:
             + [Windows](https://github.com/smasiek/Python-saper-projekt/blob/master/graphics/windows.py)
             + [Squares](https://github.com/smasiek/Python-saper-projekt/blob/master/graphics/squares.py)
             + [Icons](https://github.com/smasiek/Python-saper-projekt/blob/master/graphics/icons.py)
