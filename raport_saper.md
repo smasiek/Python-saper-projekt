@@ -45,7 +45,7 @@ na sąsiednich polach, które nie sa bombą
 + Dodanie do okna konfiguracji:
     + Przycisku przejscia do gry
     + Obsługi tabulatora do poruszania się między inputami
-        + Poruszanie się jest przemyślane tzn. jeśli n lub m juz jest podane to próba tabulacji nie zadziała
+        + Poruszanie się jest przemyślane tzn. jeśli n lub m juz jest podane to próba zmiany pola tabulatorem nie zadziała
         + Jeśli n i m jest wpisane to pole bomby automatycznie staje sie aktywne - przyspiesza wpisywanie danych 
         i jest intuicyjne
         + Jeśli nie zatwierdzimy wpisanego tekstu to ten zeruje się po dezaktywacji inputu co zwiększa estetyke i przypomina o zatwierdzaniu danych
@@ -82,7 +82,7 @@ na sąsiednich polach, które nie sa bombą
             + [Dziedziczenie #3](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L34-L41)
             + [Dziedziczenie #4](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L44-L51)
         + [#2 Timer](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L54-L91)
-        + [#3 Cat](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L54-L91)
+        + [#3 Cat](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L94-L110)
         + [#4 GameWindow](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L113-L330)
         + [#5 Square](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/squares.py#L4-L70)
         + [#6 Field](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/logic/fields.py#L5-L39)
