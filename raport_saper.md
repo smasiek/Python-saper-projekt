@@ -1,20 +1,6 @@
-#\#TODO
-1. Raport ma być treściwy i w miarę krótki. Ma zawierać założenia projektowe
-kodu, ogólny opis kodu, co udało się zrobić, z czym były problemy, dodane
-elementy specjalne, zauważone problemy z testami.
-
-2. Na końcu raportu muszą się znaleźć opisane linki do istotnych fragmentów
-kodu (w źródłach na GitHub) który obrazuje wymagane w projekcie
-konstrukcje takie jak:
-+ Lambda-wyrażenia
-+ List comprehensions
-+ Klasy
-+ Wyjątki - rzucany przy złych wymiarach
-+ Moduły
-
 #Raport z projektu
 ##Saper - Miłosz Momot
-####Założenia projektu:
+####Założenia i realizacja projektu:
 + Utworzenie podstawy Sapera - stworzenie tablicy dwu wymiarowej zawierającej
 informacje o lokalizacji bomb na planszy
 + Zaprojektowanie systemu badającego ilość bomb w pobliżu każdego z pól
@@ -78,23 +64,47 @@ na sąsiednich polach, które nie sa bombą
 + Poprawienie nazewnictwa: camelCase -> snake_case
 + Podlinkowanie kluczowych elementów programu do raportu:
     + Lambda:
-        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L301)
-        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L307)
-        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L360)
-        + [#4](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L53)
-        + [#5](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L57)
-        + [#6](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L91)
-        + [#7](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L117)
-        + [#8](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L91-L92)
+        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/saper.py#L59-L62)
+        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/saper.py#L90)
+        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/saper.py#L108)
+        + [#4](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L117-L119)
+        + [#5](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L368-L372)
+
     + List comprehensions:
-        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L103-L106)
-        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L307)
-        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L360)
-        + [#4](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L53)
-        + [#5](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L57)
-        + [#6](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L91)
-        + [#7](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L117)
-        + [#8](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L91-L92)
+        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L129-L153)
+        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/logic/fields.py#L45-L46)
+        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/logic/fields.py#L47-L48)
+    
+    + Klasy:
+        + [#1 Error](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L13-L14)
+            + [Dziedziczenie #1](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L17-L24)
+            + [Dziedziczenie #2](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L27-L31)
+            + [Dziedziczenie #3](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L34-L41)
+            + [Dziedziczenie #4](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L44-L51)
+        + [#2 Timer](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L54-L91)
+        + [#3 Cat](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L54-L91)
+        + [#4 GameWindow](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L113-L330)
+        + [#5 Square](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/squares.py#L4-L70)
+        + [#6 Field](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/logic/fields.py#L5-L39)
+    + Wyjątki:
+        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L17-L24)
+            + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L468)
+        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L27-L31)
+            + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L428)
+        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L34-L41)
+            + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L443)
+        + [#4](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L44-L51)
+            + [raise](https://github.com/smasiek/Python-saper-projekt/blob/1b33afe7975836be620a342831e791de49cd4a22/graphics/windows.py#L599)
+     + Moduły:
+        + Logika:
+            + [Fields](https://github.com/smasiek/Python-saper-projekt/blob/master/logic/fields.py)
+        + Grafika:
+            + [Windows](https://github.com/smasiek/Python-saper-projekt/blob/master/graphics/windows.py)
+            + [Squares](https://github.com/smasiek/Python-saper-projekt/blob/master/graphics/squares.py)
+            + [Icons](https://github.com/smasiek/Python-saper-projekt/blob/master/graphics/icons.py)
+        + Main:
+            + [Saper](https://github.com/smasiek/Python-saper-projekt/blob/master/saper.py)
+        
 ---
 Koniec
 ---
