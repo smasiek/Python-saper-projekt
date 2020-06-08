@@ -81,17 +81,17 @@ class TestSum(unittest.TestCase):
         square=sq.Square(0-75,0,60,60,0,ic.default) #-75 ze wzgledu na topbar
         field=fd.Field(False,1,1,5) #przechowuje informacje o bombach
         r = pygame.rect.Rect((5,5), (1, 1))# (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
-        if square.getRect().colliderect(r):
-            miny=field.getMinesAround()
+        if square.get_rect().colliderect(r):
+            miny=field.get_mines_around()
         self.assertEqual(5,miny)
 
     def test_three(self):
         square = sq.Square(0 - 75, 0, 60, 60, 0, ic.default)  # -75 ze wzgledu na topbar
         field = fd.Field(True, 1, 1, 5) #przechowuje informacje o bombach
         r = pygame.rect.Rect((5, 5), (1, 1)) # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
-        if square.getRect().colliderect(r):
-            if field.isBomb():
-                square.setImage(ic.bomb)
+        if square.get_rect().colliderect(r):
+            if field.is_bomb():
+                square.set_image(ic.bomb)
                 endGame=True
         self.assertTrue(endGame)
         self.assertEqual(ic.bomb,square._image)
@@ -101,73 +101,73 @@ class TestSum(unittest.TestCase):
         field = fd.Field(False, 0, 0, 0) #przechowuje informacje o bombach
 
         r = pygame.rect.Rect((5, 5), (1, 1)) # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
-        if square.getRect().colliderect(r):
+        if square.get_rect().colliderect(r):
             reveal=True #funkcja wywolujaca sprawdzenie, uruchomienie wymagałoby utworzenia nowego okna gry
         self.assertTrue(reveal)
-        self.assertEqual(0,field.getMinesAround())
+        self.assertEqual(0, field.get_mines_around())
 
     def test_five(self):
         square = sq.Square(0 - 75, 0, 60, 60, 0, ic.default)  # -75 ze wzgledu na topbar
-        sq.Square.flaggedCount=0
+        sq.Square.flagged_count=0
         r = pygame.rect.Rect((5, 5), (1, 1)) # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
-        if square.getRect().colliderect(r):
-            square.setClicked(2) #tu jest mina - oflagowanie
-        self.assertEqual(2,square.getClicked())
-        self.assertEqual(1,sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(2) #tu jest mina - oflagowanie
+        self.assertEqual(2, square.get_clicked())
+        self.assertEqual(1, sq.Square.flagged_count)
 
     def test_six(self):
         square = sq.Square(0 - 75, 0, 60, 60, 0, ic.default)  # -75 ze wzgledu na topbar
-        sq.Square.flaggedCount=0
+        sq.Square.flagged_count=0
         r = pygame.rect.Rect((5, 5), (1, 1)) # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
         '''Symulacja klikniec w przycisk'''
-        if square.getRect().colliderect(r):
-            square.setClicked(2) #tu jest mina - oflagowanie
-        if square.getRect().colliderect(r):
-            square.setClicked(3) #tu moze byc mina - pytajnik
-        self.assertEqual(3,square.getClicked())
-        self.assertEqual(0,sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(2) #tu jest mina - oflagowanie
+        if square.get_rect().colliderect(r):
+            square.set_clicked(3) #tu moze byc mina - pytajnik
+        self.assertEqual(3, square.get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
     def test_seven(self):
         square = sq.Square(0 - 75, 0, 60, 60, 0, ic.default)  # -75 ze wzgledu na topbar
-        sq.Square.flaggedCount = 0
+        sq.Square.flagged_count = 0
 
         r = pygame.rect.Rect((5, 5), (1, 1))  # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
 
         """
         Symulacja kliknięć na pole: tu jest mina,tu moze byc mina,odznacz
         """
-        if square.getRect().colliderect(r):
-            square.setClicked(2)
-        self.assertEqual(2,square.getClicked())
-        self.assertEqual(1,sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(2)
+        self.assertEqual(2, square.get_clicked())
+        self.assertEqual(1, sq.Square.flagged_count)
 
-        if square.getRect().colliderect(r):
-            square.setClicked(3)
-        self.assertEqual(3, square.getClicked())
-        self.assertEqual(0, sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(3)
+        self.assertEqual(3, square.get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
-        if square.getRect().colliderect(r):
-            square.setClicked(0)
-        self.assertEqual(0, square.getClicked())
-        self.assertEqual(0, sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(0)
+        self.assertEqual(0, square.get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
         """
         Druga symulacja kliknięć na pole: tu jest mina,tu moze byc mina,odznacz
         """
-        if square.getRect().colliderect(r):
-            square.setClicked(2)
-        self.assertEqual(2, square.getClicked())
-        self.assertEqual(1, sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(2)
+        self.assertEqual(2, square.get_clicked())
+        self.assertEqual(1, sq.Square.flagged_count)
 
-        if square.getRect().colliderect(r):
-            square.setClicked(3)
-        self.assertEqual(3, square.getClicked())
-        self.assertEqual(0, sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(3)
+        self.assertEqual(3, square.get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
-        if square.getRect().colliderect(r):
-            square.setClicked(0)
-        self.assertEqual(0, square.getClicked())
-        self.assertEqual(0, sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(0)
+        self.assertEqual(0, square.get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
     def test_eight(self):
         square = sq.Square(0 - 75, 0, 60, 60, 0, ic.default)  # -75 ze wzgledu na topbar
@@ -177,21 +177,21 @@ class TestSum(unittest.TestCase):
         r = pygame.rect.Rect((5, 5), (1, 1)) # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
 
         '''Symulacja klikniec w recznie stworzone pola'''
-        if square.getRect().colliderect(r):
-            square.setClicked(1)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(1)
         r1 = pygame.rect.Rect((65, 5), (1, 1))  # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
-        if square1.getRect().colliderect(r1):
-            square1.setClicked(1)
+        if square1.get_rect().colliderect(r1):
+            square1.set_clicked(1)
 
         '''Fragment funkcji sprawdzającej wygraną - sprawdzający kliknięcia'''
-        if 2 - sq.Square.visibleCount <= 0:
+        if 2 - sq.Square.visible_count <= 0:
             win=True
         self.assertTrue(win)
 
     def test_nine(self):
         square = sq.Square(0 - 75, 0, 60, 60, 0, ic.default)  # -75 ze wzgledu na topbar
         square1 = sq.Square(0 - 75, 60, 60, 60, 0, ic.default)  # -75 ze wzgledu na topbar
-        sq.Square.flaggedCount=0
+        sq.Square.flagged_count=0
         bombs = 2
         win=False
         '''field przechowuje informacje o byciu bombą poszczegolnych kwadratow'''
@@ -200,16 +200,16 @@ class TestSum(unittest.TestCase):
 
         '''Symulacja klikniec w recznie stworzone pola'''
         r = pygame.rect.Rect((5, 5), (1, 1)) # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
-        if square.getRect().colliderect(r):
-            square.setClicked(2)
-            field.incBombFlagged()
+        if square.get_rect().colliderect(r):
+            square.set_clicked(2)
+            field.inc_bomb_flagged()
         r1 = pygame.rect.Rect((65, 5), (1, 1))  # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
-        if square1.getRect().colliderect(r1):
-            square.setClicked(2)
-            field1.incBombFlagged()
+        if square1.get_rect().colliderect(r1):
+            square.set_clicked(2)
+            field1.inc_bomb_flagged()
 
         '''Fragment funkcji sprawdzającej wygraną - sprawdzający oflagowanie'''
-        if fd.Field.flaggedBombCount == bombs and sq.Square.flaggedCount == bombs:
+        if fd.Field.flagged_bomb_count == bombs and sq.Square.flagged_count == bombs:
             win=True
 
         self.assertTrue(win)
@@ -220,16 +220,16 @@ class TestSum(unittest.TestCase):
         r = pygame.rect.Rect((5, 5), (1, 1)) # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
 
         '''Symulacja kliknięcia w przycisk'''
-        if square.getRect().colliderect(r):
-            square.setClicked(1)
-        self.assertEqual(1,square.getClicked())
-        self.assertEqual(0,sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(1)
+        self.assertEqual(1, square.get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
         '''Symulacja flagowania klikniętego przycisku'''
-        if square.getRect().colliderect(r):
-            square.setClicked(2)
-        self.assertNotEqual(2, square.getClicked())
-        self.assertNotEqual(1, sq.Square.flaggedCount)
+        if square.get_rect().colliderect(r):
+            square.set_clicked(2)
+        self.assertNotEqual(2, square.get_clicked())
+        self.assertNotEqual(1, sq.Square.flagged_count)
 
     def test_eleven(self):
         '''
@@ -242,27 +242,27 @@ class TestSum(unittest.TestCase):
         topBarHeight=75
         squareHeight=60
         squareWidth=60
-        sq.Square.flaggedCount=0
+        sq.Square.flagged_count=0
         squares = [[sq.Square(i * squareHeight-topBarHeight, j * squareWidth, squareHeight, squareWidth, 0, ic.default)for j in range(m)] for i in range(n)]
 
         r = pygame.rect.Rect((5, 5), (1, 1))  # (5, 5) to koordy - oryginalnie get_pos, (1, 1) to wymiary kwadracika ktory reprezentuja kliknięcie
         '''Symulacja klikniec'''
-        if squares[0][0].getRect().colliderect(r):
-            squares[0][0].setClicked(1)
-        self.assertEqual(1, squares[0][0].getClicked())
-        self.assertEqual(0, sq.Square.flaggedCount)
+        if squares[0][0].get_rect().colliderect(r):
+            squares[0][0].set_clicked(1)
+        self.assertEqual(1, squares[0][0].get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
         r = pygame.rect.Rect((65, 5), (1, 1))
-        if squares[0][1].getRect().colliderect(r):
-            squares[0][1].setClicked(1)
-        self.assertEqual(1, squares[0][1].getClicked())
-        self.assertEqual(0, sq.Square.flaggedCount)
+        if squares[0][1].get_rect().colliderect(r):
+            squares[0][1].set_clicked(1)
+        self.assertEqual(1, squares[0][1].get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
         '''Symulacja oflagowania'''
         r = pygame.rect.Rect((125, 5), (1, 1))
-        if squares[0][2].getRect().colliderect(r):
-            squares[0][2].setClicked(2)
-        self.assertEqual(2, squares[0][2].getClicked())
-        self.assertEqual(1, sq.Square.flaggedCount)
+        if squares[0][2].get_rect().colliderect(r):
+            squares[0][2].set_clicked(2)
+        self.assertEqual(2, squares[0][2].get_clicked())
+        self.assertEqual(1, sq.Square.flagged_count)
 
         '''
         reset pól, jest, to po prostu przygotowanie od nowa planszy, w ten sam sposob odbywa się to w programie
@@ -271,13 +271,13 @@ class TestSum(unittest.TestCase):
         '''
         squares = [[sq.Square(i * squareHeight - topBarHeight, j * squareWidth, squareHeight, squareWidth, 0, ic.default) for j in
                     range(m)] for i in range(n)]
-        sq.Square.visibleCount = 0
-        sq.Square.flaggedCount = 0
+        sq.Square.visible_count = 0
+        sq.Square.flagged_count = 0
 
-        self.assertEqual(0, squares[0][0].getClicked())
-        self.assertEqual(0, squares[0][1].getClicked())
-        self.assertEqual(0, squares[0][2].getClicked())
-        self.assertEqual(0, sq.Square.flaggedCount)
+        self.assertEqual(0, squares[0][0].get_clicked())
+        self.assertEqual(0, squares[0][1].get_clicked())
+        self.assertEqual(0, squares[0][2].get_clicked())
+        self.assertEqual(0, sq.Square.flagged_count)
 
     def test_twelve(self):
         xyzzySequence = [False, False, False, False, False]
@@ -286,7 +286,7 @@ class TestSum(unittest.TestCase):
         topBarHeight = 75
         squareHeight = 60
         squareWidth = 60
-        sq.Square.flaggedCount = 0
+        sq.Square.flagged_count = 0
         squares = [[sq.Square(i * squareHeight - topBarHeight, j * squareWidth, squareHeight, squareWidth, 0, ic.default) for j in
                     range(m)] for i in range(n)]
 
@@ -312,8 +312,8 @@ class TestSum(unittest.TestCase):
             #gameWindow.xyzzy(fields)
 
             #w tescie ręcznie zmienie grafiki pól
-            squares[0][0].setImage(ic.xyzz)
-            squares[1][1].setImage(ic.xyzz)
+            squares[0][0].set_image(ic.xyzz)
+            squares[1][1].set_image(ic.xyzz)
 
         self.assertEqual(ic.xyzz, squares[0][0]._image)
         self.assertEqual(ic.xyzz, squares[1][1]._image)
@@ -321,8 +321,8 @@ class TestSum(unittest.TestCase):
         '''Funkcja resetująca plansze, uzasadnienie podobnie jak w test_eleven'''
         squares = [[sq.Square(i * squareHeight - 75, j * squareWidth, squareHeight, squareWidth, 0, ic.default) for j in
                     range(m)] for i in range(n)]
-        sq.Square.visibleCount = 0
-        sq.Square.flaggedCount = 0
+        sq.Square.visible_count = 0
+        sq.Square.flagged_count = 0
 
         self.assertNotEqual(ic.xyzz, squares[0][0]._image)
         self.assertNotEqual(ic.xyzz, squares[1][1]._image)

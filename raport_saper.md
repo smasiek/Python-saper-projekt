@@ -67,4 +67,35 @@ na sąsiednich polach, które nie sa bombą
         + Zmiast łapać wyjątki w których ktoś wpisałby ilosc bomb przed podaniem n i m to blokuje taką możliwość.
         Myślę, że to lepsza praktyka 
 + Exception handling
-+ 
++ Dodanie timer'a do okna gry
+    + Problem: Odpowiednie resetowanie i ustawianie timera podczas pierwszego kliknięcia oflagowania
+        + Rozwiązanie: Dodanie pola _started symbolizującego rozpoczęcie/zakonczenie gry i timera
++ Dodanie kota który jest odpowiednikiem słoneczka z oryginalnej wersji sapera
++ Obsługa większych ikon przy wybraniu planszy mniejszej niz 8
++ Dodanie nazwy okna i ikon
++ Dodanie komentarzy i docstringów
++ Stworzenie requirements.txt
++ Poprawienie nazewnictwa: camelCase -> snake_case
++ Podlinkowanie kluczowych elementów programu do raportu:
+    + Lambda:
+        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L301)
+        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L307)
+        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L360)
+        + [#4](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L53)
+        + [#5](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L57)
+        + [#6](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L91)
+        + [#7](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L117)
+        + [#8](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L91-L92)
+    + List comprehensions:
+        + [#1](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L103-L106)
+        + [#2](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L307)
+        + [#3](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L360)
+        + [#4](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L53)
+        + [#5](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L57)
+        + [#6](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L91)
+        + [#7](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/saper.py#L117)
+        + [#8](https://github.com/smasiek/Python-saper-projekt/blob/d55fd4bd7f3fadb4c39ad63f5c6a28e59b667795/graphics/windows.py#L91-L92)
+---
+Koniec
+---
+
